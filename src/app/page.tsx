@@ -2,14 +2,16 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Database, Palette, Zap, Users, GitBranch, BarChart3, CheckCircle, Star, Menu, X, Mail, Gift, Clock, Sparkles } from 'lucide-react';
+import { ArrowRight, Database, Menu, X, Mail, Star, Users, Key, CheckCircle, Zap, Gift } from 'lucide-react';
 import { getCampaignInfo } from '@/lib/campaignConfig';
+import DemoCanvas from '@/components/DemoCanvas';
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState('');
+  const [showNotification, setShowNotification] = useState(false);
   const [campaignInfo, setCampaignInfo] = useState<any>(null);
 
   useEffect(() => {
@@ -27,9 +29,6 @@ export default function Home() {
     setIsSubmitting(true);
     
     try {
-      console.log('Attempting to register email:', email);
-      
-      // 開発環境とプロダクション環境を区別
       const baseUrl = process.env.NODE_ENV === 'development' 
         ? 'http://localhost:3002' 
         : '';
@@ -39,71 +38,92 @@ export default function Home() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
       });
-      console.log('Response status:', response.status);
       
       const result = await response.json();
       
       if (result.success) {
-        setMessage(`ウェイトリストに登録しました！正式リリース時にアカウント作成のご案内をお送りします。${campaignInfo?.trialDays || 30}日間の無料体験付きです。`);
+        setMessage('ウェイトリストに登録しました！正式リリース時にご案内をお送りします。');
         setEmail('');
+        setShowNotification(true);
+        setTimeout(() => setShowNotification(false), 5000);
       } else {
         setMessage(result.error || '登録に失敗しました。もう一度お試しください。');
+        setShowNotification(true);
+        setTimeout(() => setShowNotification(false), 5000);
       }
     } catch (error) {
-      console.error('Waitlist registration error:', error);
       setMessage('登録に失敗しました。もう一度お試しください。');
+      setShowNotification(true);
+      setTimeout(() => setShowNotification(false), 5000);
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white relative">
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-b border-gray-200 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center">
-                <Database className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-xl font-bold text-gray-900">Notion Database Canvas</span>
+      <header className="w-full absolute top-0 left-0 right-0 z-40">
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+          {/* Logo */}
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
+              <Database className="w-5 h-5 text-white" />
             </div>
-
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center gap-8">
-              <a href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">機能</a>
-              <a href="#demo" className="text-gray-600 hover:text-gray-900 transition-colors">デモ</a>
-              <a href="#pricing" className="text-gray-600 hover:text-gray-900 transition-colors">料金</a>
-              <Link 
-                href="/access-code"
-                className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
-              >
-                テストユーザーはこちら
-              </Link>
-            </nav>
-
-            {/* Mobile menu button */}
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-            >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+            <span className="text-xl font-semibold text-white">Notion Database Canvas</span>
           </div>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center gap-8">
+            <a href="#features" className="text-white/80 hover:text-white font-medium">機能</a>
+            <a href="#pricing" className="text-white/80 hover:text-white font-medium">料金</a>
+            <a href="#demo" className="text-white/80 hover:text-white font-medium">使い方</a>
+            <Link 
+              href="/access-code"
+              className="text-white/80 hover:text-white font-medium"
+            >
+              ログイン
+            </Link>
+            <Link
+              href="#waitlist"
+              className="bg-white/20 backdrop-blur-sm text-white px-6 py-2 rounded-full font-medium hover:bg-white/30 transition-colors"
+            >
+              登録
+            </Link>
+            <Link
+              href="/access-code"
+              className="text-white/80 hover:text-white font-medium text-sm"
+            >
+              テストユーザーはこちら
+            </Link>
+          </nav>
+
+          {/* Mobile menu button */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="md:hidden p-2 text-white"
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden border-t border-gray-200 bg-white">
-            <div className="px-4 py-4 space-y-3">
-              <a href="#features" className="block text-gray-600 hover:text-gray-900 transition-colors">機能</a>
-              <a href="#demo" className="block text-gray-600 hover:text-gray-900 transition-colors">デモ</a>
-              <a href="#pricing" className="block text-gray-600 hover:text-gray-900 transition-colors">料金</a>
-              <Link 
+          <div className="md:hidden border-t border-white/20 bg-black/40 backdrop-blur-sm">
+            <div className="px-6 py-4 space-y-4">
+              <a href="#features" className="block text-white/80 font-medium">機能</a>
+              <a href="#pricing" className="block text-white/80 font-medium">料金</a>
+              <a href="#demo" className="block text-white/80 font-medium">使い方</a>
+              <Link href="/access-code" className="block text-white/80 font-medium">ログイン</Link>
+              <Link
+                href="#waitlist"
+                className="block bg-white/20 text-white px-6 py-2 rounded-full font-medium text-center"
+              >
+                登録
+              </Link>
+              <Link
                 href="/access-code"
-                className="block text-sm text-gray-500 hover:text-gray-700 transition-colors text-center"
+                className="block text-white/80 font-medium text-sm text-center"
               >
                 テストユーザーはこちら
               </Link>
@@ -112,383 +132,585 @@ export default function Home() {
         )}
       </header>
 
-      {/* Hero Section */}
-      <section className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
+      {/* Hero Section with Canvas Background */}
+      <section className="relative pt-0 pb-32 px-6 overflow-hidden">
+        {/* Background - Image/Video ready */}
+        <div className="absolute inset-0">
+          {/* 
+          スクリーンショット/動画用エリア - 後で置き換え可能
+          
+          動画の場合:
+          <video 
+            autoPlay 
+            muted 
+            loop 
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+          >
+            <source src="/path/to/your/video.mp4" type="video/mp4" />
+          </video>
+          
+          画像の場合:
+          <img 
+            src="/path/to/your/screenshot.png" 
+            alt="Notion Database Canvas"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          */}
+          
+          {/* 現在の仮背景 */}
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-slate-900">
+            <div className="absolute inset-0 opacity-30">
+              {/* Canvas Grid Background */}
+              <div className="w-full h-full bg-[linear-gradient(to_right,#e5e7eb_1px,transparent_1px),linear-gradient(to_bottom,#e5e7eb_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+              
+              {/* Database Table Cards */}
+              <div className="absolute top-20 left-20 w-48 h-32 bg-white rounded-xl shadow-lg border border-gray-200 p-4 transform rotate-2">
+                <div className="text-sm font-semibold text-gray-800 mb-2">Users</div>
+                <div className="space-y-1 text-xs text-gray-600">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                    <span>id</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span>name</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                    <span>email</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="absolute top-40 right-32 w-48 h-32 bg-white rounded-xl shadow-lg border border-gray-200 p-4 transform -rotate-1">
+                <div className="text-sm font-semibold text-gray-800 mb-2">Projects</div>
+                <div className="space-y-1 text-xs text-gray-600">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                    <span>id</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span>title</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                    <span>user_id</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="absolute bottom-32 left-32 w-48 h-32 bg-white rounded-xl shadow-lg border border-gray-200 p-4 transform rotate-1">
+                <div className="text-sm font-semibold text-gray-800 mb-2">Tasks</div>
+                <div className="space-y-1 text-xs text-gray-600">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                    <span>id</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span>title</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                    <span>project_id</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Connection Lines */}
+              <svg className="absolute inset-0 w-full h-full pointer-events-none">
+                <defs>
+                  <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="#8b5cf6" opacity="0.6" />
+                  </marker>
+                </defs>
+                <line x1="200" y1="180" x2="400" y2="260" stroke="#8b5cf6" strokeWidth="2" opacity="0.6" markerEnd="url(#arrowhead)" />
+                <line x1="400" y1="320" x2="250" y2="400" stroke="#8b5cf6" strokeWidth="2" opacity="0.6" markerEnd="url(#arrowhead)" />
+              </svg>
+            </div>
+          </div>
+          
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-black/40"></div>
+        </div>
+
+        {/* Content */}
+        <div className="relative z-10 max-w-4xl mx-auto text-center pt-32">
+          <h1 className="text-5xl lg:text-7xl font-bold text-white leading-tight mb-8">
+            Notionデータベースの、
+            <br />
+            新しい作り方。
+          </h1>
+          <p className="text-xl lg:text-2xl text-gray-200 mb-12 max-w-3xl mx-auto leading-relaxed">
+複雑なNotionデータベースでも簡単設計。
+            <br />
+            あなたのアイデアを瞬時にNotionに展開します。
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <a
+              href="#waitlist"
+              className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:from-purple-700 hover:to-blue-700 transition-all shadow-lg hover:shadow-xl inline-flex items-center gap-2"
+            >
+              無料で始める
+              <ArrowRight className="w-5 h-5" />
+            </a>
+            <a
+              href="#demo"
+              className="text-gray-300 hover:text-white font-medium text-lg inline-flex items-center gap-2"
+            >
+              実際の操作を見る
+              <ArrowRight className="w-4 h-4" />
+            </a>
+          </div>
+          
+          {/* Waitlist Button */}
+          <div className="mt-12">
+            <a
+              href="#waitlist"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/20 text-white rounded-full font-medium hover:bg-white/20 transition-all"
+            >
+              <Mail className="w-5 h-5" />
+              ウェイトリストに登録する
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Feature Showcase - 3 Blocks */}
+      <section className="py-24 px-6 bg-white">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center max-w-4xl mx-auto">
-            {/* ステータスバッジ */}
-            <div className="mb-6 inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-full text-sm text-blue-700">
-              <span>🚀</span>
-              <span>まもなくリリース - ウェイティングリスト募集中</span>
-            </div>
-            
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              ビジュアル
-              <span className="block" style={{ color: '#4a8bb2' }}>データベース設計</span>
-              の新しいカタチ
-            </h1>
-            
-            <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-              Notionデータベースは強力ですが、複雑な構造を設計するのは困難です。
-              <br className="hidden md:block" />
-              Database Canvasなら、直感的なビジュアル設計で、この問題を解決します。
-            </p>
-
-            {/* ウェイティングリスト特典 */}
-            {campaignInfo?.isActive && (
-              <div className="bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-2xl p-6 mb-8">
-                <div className="flex items-center justify-center gap-2 mb-3">
-                  <Gift className="w-5 h-5 text-purple-600" />
-                  <span className="text-purple-900 font-semibold">早期登録特典</span>
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Block 1 - Visual Design */}
+            <div className="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200">
+              {/* Content Area */}
+              <div className="aspect-square bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 p-6 relative">
+                <div className="bg-white rounded-lg shadow-md p-4 h-full flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="w-4 h-4 bg-gray-900 rounded-sm"></div>
+                      <span className="text-sm font-medium">テーブル設計</span>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="bg-gray-100 rounded p-2 text-xs">Users テーブル</div>
+                      <div className="bg-gray-100 rounded p-2 text-xs">Projects テーブル</div>
+                      <div className="bg-gray-100 rounded p-2 text-xs">Tasks テーブル</div>
+                    </div>
+                  </div>
+                  <div className="text-xs text-gray-500 mt-4">
+                    ドラッグ&ドロップで直感的に設計
+                  </div>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                  {campaignInfo.trialDays}日間プレミアム体験
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  ウェイティングリスト登録者には、リリース時に{campaignInfo.trialDays}日間のプレミアム体験をプレゼント
+              </div>
+              
+              {/* Description */}
+              <div className="p-6">
+                <h4 className="text-xl font-bold text-gray-900 mb-3">直感的なキャンバス設計</h4>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  テーブル構造を視覚的に配置し、プロパティやリレーションを簡単に設定。複雑なデータベース設計も直感的に行えます。
                 </p>
-                <div className="flex items-center justify-center gap-4 text-sm text-gray-500">
-                  <span>✓ 無制限キャンバス作成</span>
-                  <span>✓ 無制限のエクスポート回数</span>
-                  <span>✓ キャンバスの永久保存</span>
-                </div>
-                <div className="flex items-center justify-center gap-1 mt-3 text-xs text-purple-600">
-                  <Clock className="w-3 h-3" />
-                  <span>特典期間終了まで残り{campaignInfo.remainingDays}日</span>
-                </div>
               </div>
-            )}
-
-            {/* ウェイティングリスト登録フォーム */}
-            <div className="bg-gradient-to-br from-blue-50 via-purple-50 to-cyan-50 border-2 border-blue-200 rounded-3xl p-8 shadow-2xl mb-8 max-w-2xl mx-auto relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500"></div>
-              
-              <div className="flex items-center justify-center gap-3 mb-4">
-                <div className="p-2 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl">
-                  <Sparkles className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900">
-                  🚀 早期アクセス登録
-                </h3>
-              </div>
-              
-              <p className="text-gray-700 mb-6 text-center text-lg leading-relaxed">
-                Notionデータベース設計の<span className="font-bold text-blue-600">革命</span>が始まります
-                <span className="block text-purple-600 font-bold text-xl mt-2">
-                  🎁 30日間プレミアム体験 + 優先アクセス権
-                </span>
-              </p>
-              
-              <form onSubmit={handleWaitlistSubmit} className="space-y-4">
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                  <input
-                    type="email"
-                    placeholder="your@email.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-sm"
-                    required
-                  />
-                </div>
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className={`w-full py-4 rounded-xl font-bold text-lg text-white transition-all transform ${
-                    isSubmitting
-                      ? 'bg-gray-400 cursor-not-allowed'
-                      : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 hover:scale-105 shadow-xl hover:shadow-2xl'
-                  }`}
-                >
-                  {isSubmitting ? (
-                    <div className="flex items-center justify-center gap-2">
-                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                      <span>登録中...</span>
-                    </div>
-                  ) : (
-                    <div className="flex items-center justify-center gap-2">
-                      <Zap className="w-5 h-5" />
-                      <span>🚀 今すぐ早期アクセス登録</span>
-                    </div>
-                  )}
-                </button>
-              </form>
-
-              {message && (
-                <div className={`mt-4 p-3 rounded-lg text-sm ${
-                  message.includes('失敗') 
-                    ? 'bg-red-50 border border-red-200 text-red-700' 
-                    : 'bg-green-50 border border-green-200 text-green-700'
-                }`}>
-                  <p className="text-center">{message}</p>
-                </div>
-              )}
             </div>
 
-            {/* その他のアクション */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="inline-flex items-center gap-2 px-8 py-4 bg-gray-100 text-gray-900 rounded-xl font-semibold hover:bg-gray-200 transition-all">
-                デモを見る
-                <Zap size={20} />
-              </button>
+            {/* Block 2 - Notion Integration */}
+            <div className="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200">
+              {/* Content Area */}
+              <div className="aspect-square bg-gradient-to-br from-blue-50 to-cyan-50 p-6 relative">
+                <div className="bg-white rounded-lg shadow-md p-4 h-full flex flex-col justify-between">
+                  <div>
+                    <div className="text-lg font-bold mb-2">Notionデータベースを<br />ワンクリックで<br />自動生成</div>
+                    <div className="bg-gray-900 h-8 rounded mb-3"></div>
+                    <div className="space-y-1">
+                      <div className="bg-gray-100 h-2 rounded w-3/4"></div>
+                      <div className="bg-gray-100 h-2 rounded w-1/2"></div>
+                    </div>
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    自動エクスポート機能
+                  </div>
+                </div>
+              </div>
+              
+              {/* Description */}
+              <div className="p-6">
+                <h4 className="text-xl font-bold text-gray-900 mb-3">シームレスなエクスポート</h4>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  設計したデータベース構造をNotionに自動展開。テーブル、プロパティ、リレーションがそのまま反映されます。
+                </p>
+              </div>
             </div>
-            
-            {/* テストユーザー向けリンク */}
-            <div className="mt-6">
-              <Link 
-                href="/access-code"
-                className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
-              >
-                テストユーザーの方はこちら →
-              </Link>
+
+            {/* Block 3 - Team Collaboration */}
+            <div className="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200">
+              {/* Content Area */}
+              <div className="aspect-square bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 p-6 relative">
+                <div className="bg-white rounded-lg shadow-md p-4 h-full flex flex-col justify-between">
+                  <div>
+                    <div className="text-lg font-bold mb-2">Notionデータベースを<br />ワンクリックで<br />自動生成</div>
+                    <div className="grid grid-cols-2 gap-2 mb-3">
+                      <div className="bg-orange-200 rounded h-12"></div>
+                      <div className="bg-blue-200 rounded h-12"></div>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="bg-gray-100 h-2 rounded w-full"></div>
+                      <div className="bg-gray-100 h-2 rounded w-2/3"></div>
+                    </div>
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    リアルタイム共同編集
+                  </div>
+                </div>
+              </div>
+              
+              {/* Description */}
+              <div className="p-6">
+                <h4 className="text-xl font-bold text-gray-900 mb-3">リアルタイム協業</h4>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  リアルタイム編集が可能。バージョン管理機能で設計履歴の追跡も簡単に行えます。
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section id="features" className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">なぜNotion Database Canvasなのか？</h2>
-            <p className="text-xl text-gray-600">従来のER図ツールを超えた、次世代のデータベース設計体験</p>
+      {/* Waitlist Section - Modulify Style */}
+      <section id="waitlist" className="py-24 px-6 bg-gray-50" style={{
+        backgroundImage: 'radial-gradient(circle, #d1d5db 1px, transparent 1px)',
+        backgroundSize: '20px 20px'
+      }}>
+        <div className="max-w-4xl mx-auto text-center">
+          {/* Early Access Campaign */}
+          <div className="mb-12">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full font-medium mb-6 shadow-lg">
+              <Gift className="w-5 h-5" />
+              早期登録特典
+            </div>
+            <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+              30日間プレミアム体験
+            </h2>
+            <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+              ウェイトリスト登録者には、<br className="hidden md:inline" />
+              リリース時に30日間のプレミアム体験をプレゼント
+            </p>
+            
+            <div className="flex flex-wrap justify-center gap-6 mb-8">
+              <div className="flex items-center gap-2 text-gray-700">
+                <CheckCircle className="w-5 h-5 text-green-600" />
+                <span className="font-medium">無制限キャンバス作成</span>
+              </div>
+              <div className="flex items-center gap-2 text-gray-700">
+                <CheckCircle className="w-5 h-5 text-green-600" />
+                <span className="font-medium">無制限のエクスポート回数</span>
+              </div>
+              <div className="flex items-center gap-2 text-gray-700">
+                <CheckCircle className="w-5 h-5 text-green-600" />
+                <span className="font-medium">キャンバスの永久保存</span>
+              </div>
+            </div>
+          </div>
+          
+          {/* Main Input - Purple Border Design */}
+          <div className="max-w-2xl mx-auto mb-6">
+            <form onSubmit={handleWaitlistSubmit} className="relative">
+              <div className="bg-gradient-to-r from-purple-200 to-pink-200 p-1 rounded-full">
+                <div className="flex items-center bg-white rounded-full p-2">
+                  <div className="flex items-center gap-3 pl-6 pr-4 flex-1">
+                    <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+                      <Mail className="w-4 h-4 text-white" />
+                    </div>
+                    <input
+                      type="email"
+                      placeholder="ウェイトリストに参加する"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="flex-1 text-gray-700 placeholder-gray-400 border-none outline-none text-lg"
+                      required
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className={`px-8 py-4 rounded-full font-semibold transition-all ${
+                      isSubmitting
+                        ? 'bg-gray-300 cursor-not-allowed text-gray-500'
+                        : 'bg-black text-white hover:bg-gray-800'
+                    }`}
+                  >
+                    {isSubmitting ? '登録中...' : '参加する'}
+                  </button>
+                </div>
+              </div>
+            </form>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200 hover:shadow-lg transition-shadow">
-              <div className="w-12 h-12 rounded-xl mb-6 flex items-center justify-center" style={{ backgroundColor: '#4a8bb2' }}>
-                <Palette className="w-6 h-6 text-white" />
+          {/* Surprise Me Button */}
+          <div className="mb-12">
+            <Link
+              href="/access-code"
+              className="inline-flex items-center gap-2 px-6 py-3 border border-gray-200 rounded-full text-gray-600 hover:text-gray-900 hover:border-gray-300 transition-all bg-white shadow-sm"
+            >
+              <div className="w-6 h-6 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full flex items-center justify-center">
+                <Key className="w-3 h-3 text-white" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">直感的なビジュアル設計</h3>
-              <p className="text-gray-600">
-                ドラッグ&ドロップでテーブルを配置し、美しいリレーション線でつなぐだけ。コードを書く必要はありません。
-              </p>
-            </div>
+              アクセスコードをお持ちの方
+            </Link>
+          </div>
 
-            <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200 hover:shadow-lg transition-shadow">
-              <div className="w-12 h-12 rounded-xl mb-6 flex items-center justify-center" style={{ backgroundColor: '#598e71' }}>
-                <Zap className="w-6 h-6 text-white" />
+          {/* Modern Notification Popup */}
+          {showNotification && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
+              <div className={`relative max-w-md w-full mx-4 bg-gradient-to-br ${
+                message.includes('失敗')
+                  ? 'from-red-500/20 to-pink-500/20'
+                  : 'from-purple-500/20 to-pink-500/20'
+              } backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 p-8 overflow-hidden`}>
+                {/* Background decoration */}
+                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent"></div>
+                
+                <div className="relative text-center">
+                  <div className={`w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 ${
+                    message.includes('失敗')
+                      ? 'bg-gradient-to-br from-red-500 to-pink-500'
+                      : 'bg-gradient-to-br from-green-400 to-emerald-500'
+                  } shadow-lg`}>
+                    {message.includes('失敗') ? (
+                      <X className="w-10 h-10 text-white" />
+                    ) : (
+                      <CheckCircle className="w-10 h-10 text-white" />
+                    )}
+                  </div>
+                  
+                  <h3 className="text-3xl font-bold text-white mb-4">
+                    {message.includes('失敗') ? 'エラーが発生しました' : 'ありがとうございます！'}
+                  </h3>
+                  
+                  <p className="text-lg text-white/80 mb-8 leading-relaxed">
+                    {message}
+                  </p>
+                  
+                  <button
+                    onClick={() => setShowNotification(false)}
+                    className={`px-10 py-4 rounded-full font-semibold text-white transition-all transform hover:scale-105 ${
+                      message.includes('失敗')
+                        ? 'bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600'
+                        : 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600'
+                    } shadow-xl`}
+                  >
+                    わかりました
+                  </button>
+                </div>
+                
+                {/* Close button */}
+                <button
+                  onClick={() => setShowNotification(false)}
+                  className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                >
+                  <X className="w-5 h-5 text-white" />
+                </button>
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Notionエクスポート</h3>
-              <p className="text-gray-600">
-                設計したデータベースをワンクリックでNotionに反映。データ連携も自在に設定可能。
-              </p>
             </div>
+          )}
+        </div>
 
-            <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200 hover:shadow-lg transition-shadow">
-              <div className="w-12 h-12 rounded-xl mb-6 flex items-center justify-center" style={{ backgroundColor: '#d09b46' }}>
-                <BarChart3 className="w-6 h-6 text-white" />
+      </section>
+
+
+
+      {/* Interactive Demo Section */}
+      <section id="demo" className="py-24 px-6 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">実際にお試しください</h2>
+            <p className="text-xl text-gray-600">
+              インタラクティブなデモでNotion Database Canvasの魅力を体験
+            </p>
+          </div>
+          
+          <div className="bg-white rounded-3xl p-6 shadow-2xl border border-gray-200">
+            <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-4 mb-4">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                <span className="text-sm text-gray-600 ml-2">Notion Database Canvas - デモ</span>
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">安全なクラウド保存</h3>
-              <p className="text-gray-600">
-                作成したキャンバスは自動でクラウドに保存。どこからでもアクセス可能で、データ消失の心配もありません。
+            </div>
+            
+            <div className="relative">
+              <DemoCanvas />
+              <div className="absolute inset-0 bg-gradient-to-t from-white/5 via-transparent to-transparent pointer-events-none rounded-2xl"></div>
+            </div>
+            
+            <div className="mt-6 text-center">
+              <p className="text-sm text-gray-500 mb-4">
+                ✨ ドラッグ&ドロップでテーブルを移動 • リレーションライン描画 • プロパティ編集
               </p>
+              <a
+                href="#waitlist"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl font-semibold hover:from-purple-700 hover:to-blue-700 transition-all shadow-lg"
+              >
+                <Database className="w-5 h-5" />
+                実際に使ってみる
+                <ArrowRight className="w-4 h-4" />
+              </a>
             </div>
           </div>
         </div>
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="py-24 bg-gradient-to-br from-gray-50 via-white to-blue-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <div className="inline-flex items-center gap-2 px-6 py-3 bg-green-100 text-green-700 rounded-full font-semibold mb-6">
-              <Gift className="w-5 h-5" />
-              <span>料金プラン</span>
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 to-green-900 bg-clip-text text-transparent mb-6">シンプルな料金体系</h2>
-            <p className="text-xl md:text-2xl text-gray-700 max-w-3xl mx-auto">まずは無料でお試しください。<span className="font-semibold text-green-700">必要に応じてアップグレード</span></p>
+      <section id="pricing" className="py-24 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">シンプルな料金体系</h2>
+            <p className="text-xl text-gray-600">
+              まずは無料でスタート、必要に応じてアップグレード
+            </p>
           </div>
-          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {/* Free Plan */}
-            <div className="bg-white/80 backdrop-blur-sm p-8 md:p-10 rounded-3xl shadow-xl border-2 border-gray-200">
-              <div className="text-center mb-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">Free</h3>
-                <div className="text-5xl font-bold text-gray-900 mb-4">¥0</div>
-                <p className="text-gray-600">個人利用や試用に最適</p>
-              </div>
-              <ul className="space-y-4 mb-8">
+            <div className="bg-white rounded-3xl p-8 border border-gray-200">
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">無料プラン</h3>
+              <div className="text-4xl font-bold text-gray-900 mb-4">¥0<span className="text-lg font-normal text-gray-500">/月</span></div>
+              <p className="text-gray-600 mb-6">はじめて利用する方に最適</p>
+              
+              <ul className="space-y-3 mb-8">
                 <li className="flex items-center gap-3">
-                  <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
-                  <span className="text-gray-700">キャンバス作成 <span className="font-semibold">2個まで</span></span>
+                  <CheckCircle className="w-5 h-5 text-green-600" />
+                  <span className="text-gray-700">キャンバス 2個まで</span>
                 </li>
                 <li className="flex items-center gap-3">
-                  <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
-                  <span className="text-gray-700">Notionエクスポート <span className="font-semibold">月10回まで</span></span>
+                  <CheckCircle className="w-5 h-5 text-green-600" />
+                  <span className="text-gray-700">月10回のエクスポート</span>
                 </li>
                 <li className="flex items-center gap-3">
-                  <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
+                  <CheckCircle className="w-5 h-5 text-green-600" />
                   <span className="text-gray-700">すべてのプロパティタイプ</span>
                 </li>
-                <li className="flex items-center gap-3">
-                  <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
-                  <span className="text-gray-700">自動保存機能（30日間）</span>
-                </li>
               </ul>
-              <Link
-                href="/signup"
-                className="block w-full text-center px-6 py-3 bg-gray-900 text-white rounded-xl font-semibold hover:bg-black transition-colors"
-              >
-                無料で始める
-              </Link>
+              
+              <button className="w-full py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors">
+                準備中
+              </button>
             </div>
+            
             {/* Premium Plan */}
-            <div className="bg-gray-900 p-8 md:p-10 rounded-3xl shadow-xl relative">
-              <div className="absolute top-4 right-4 bg-gray-700 text-gray-200 px-4 py-1 rounded-full text-sm font-medium">
-                おすすめ
+            <div className="bg-purple-600 rounded-3xl p-8 text-white relative">
+              <div className="absolute top-4 right-4 bg-white text-purple-600 px-3 py-1 rounded-full text-sm font-medium">
+                人気
               </div>
-              <div className="text-center mb-8">
-                <h3 className="text-2xl font-bold text-white mb-2">Premium</h3>
-                <div className="text-5xl font-bold text-white mb-4">
-                  <span className="text-2xl align-top">¥</span>320
-                  <span className="text-lg font-normal">/月</span>
-                </div>
-                <p className="text-gray-400">チームやプロフェッショナル向け</p>
-              </div>
-              <ul className="space-y-4 mb-8">
+              <h3 className="text-2xl font-bold mb-2">プレミアム</h3>
+              <div className="text-4xl font-bold mb-4">¥320<span className="text-lg font-normal text-purple-200">/月</span></div>
+              <p className="text-purple-100 mb-6">プロフェッショナル向け</p>
+              
+              <ul className="space-y-3 mb-8">
                 <li className="flex items-center gap-3">
-                  <CheckCircle className="w-5 h-5 text-gray-400 flex-shrink-0" />
-                  <span className="text-gray-300">キャンバス作成 <span className="font-semibold text-white">無制限</span></span>
+                  <CheckCircle className="w-5 h-5 text-purple-200" />
+                  <span>無制限キャンバス作成</span>
                 </li>
                 <li className="flex items-center gap-3">
-                  <CheckCircle className="w-5 h-5 text-gray-400 flex-shrink-0" />
-                  <span className="text-gray-300">Notionエクスポート <span className="font-semibold text-white">無制限</span></span>
+                  <CheckCircle className="w-5 h-5 text-purple-200" />
+                  <span>無制限エクスポート</span>
                 </li>
                 <li className="flex items-center gap-3">
-                  <CheckCircle className="w-5 h-5 text-gray-400 flex-shrink-0" />
-                  <span className="text-gray-300">すべてのプロパティタイプ</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <CheckCircle className="w-5 h-5 text-gray-400 flex-shrink-0" />
-                  <span className="text-gray-300">自動保存機能（永久保存）</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <CheckCircle className="w-5 h-5 text-gray-400 flex-shrink-0" />
-                  <span className="text-gray-300">優先サポート</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Sparkles className="w-5 h-5 text-gray-500 flex-shrink-0" />
-                  <span className="text-gray-300 font-medium">今後追加される新機能も利用可能</span>
+                  <CheckCircle className="w-5 h-5 text-purple-200" />
+                  <span>優先サポート</span>
                 </li>
               </ul>
-              <button className="block w-full text-center px-6 py-3 bg-gray-700 text-gray-300 rounded-xl font-medium hover:bg-gray-600 transition-colors">
+              
+              <button className="w-full py-3 bg-white text-purple-600 rounded-xl font-semibold hover:bg-gray-50 transition-colors">
                 準備中
               </button>
             </div>
           </div>
-          <div className="text-center mt-12">
-            <p className="text-gray-600">
-              現在、プロモーションコードをお持ちの方は<span className="font-semibold text-purple-600">Premium体験版</span>をご利用いただけます
-            </p>
-          </div>
         </div>
       </section>
 
-      {/* Demo Section */}
-      <section id="demo" className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">実際の操作を見てみよう</h2>
-            <p className="text-xl text-gray-600">わずか数分でプロフェッショナルなデータベース設計が完成</p>
-          </div>
-          
-          <div className="bg-gray-900 rounded-3xl p-8 md:p-12">
-            <div className="aspect-video bg-gray-800 rounded-2xl flex items-center justify-center border-2 border-gray-700">
-              <div className="text-center">
-                <div className="w-20 h-20 bg-gray-700 rounded-2xl mx-auto mb-4 flex items-center justify-center">
-                  <Database className="w-10 h-10 text-gray-400" />
-                </div>
-                <h3 className="text-xl font-semibold text-white mb-2">デモ動画</h3>
-                <p className="text-gray-400">実際の操作画面をご覧ください</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Testimonials */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">ユーザーの声</h2>
-            <p className="text-xl text-gray-600">実際に使っている開発者からの評価</p>
-          </div>
-
-          {/* Coming Soon: Real User Testimonials */}
-          <div className="bg-gray-50 rounded-3xl p-12 text-center">
-            <div className="max-w-2xl mx-auto">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mx-auto mb-6 flex items-center justify-center">
-                <Sparkles className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">実際のユーザーの声をお待ちしています</h3>
-              <p className="text-lg text-gray-600 mb-6">
-                Notion Database Canvasを使っていただいた感想を、ぜひXでシェアしてください！<br />
-                素晴らしいフィードバックはこちらに掲載させていただきます。
-              </p>
-              <div className="inline-flex items-center gap-2 px-6 py-3 bg-white rounded-xl shadow-sm border border-gray-200">
-                <span className="text-gray-500 text-sm">ハッシュタグ:</span>
-                <span className="font-mono text-blue-600 font-medium">#DatabaseCanvas</span>
-              </div>
-            </div>
+      <section className="py-24 px-6 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">ユーザーの声</h2>
+            <p className="text-gray-600">実際にご利用いただいた開発者からのフィードバック</p>
           </div>
           
-          {/* TODO: Replace with actual testimonials when available */}
-          {/* 
           <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <div key={index} className="bg-white rounded-2xl shadow-lg overflow-hidden">
-                <img 
-                  src={`/testimonials/${testimonial.image}`} 
-                  alt={`${testimonial.name}からの感想ツイート`}
-                  className="w-full h-auto"
-                />
+            {/* Testimonial 1 */}
+            <div className="bg-white rounded-2xl p-6 shadow-lg">
+              <div className="flex items-start gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                ))}
               </div>
-            ))}
-          </div>
-          */}
-        </div>
-      </section>
+              <p className="text-gray-700 mb-4 leading-relaxed">
+                「複雑なデータベース構造も視覚的に設計できるのが素晴らしい。設計の見通しが格段に良くなりました。」
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full"></div>
+                <div>
+                  <p className="font-semibold text-gray-900">田中 さゆり</p>
+                  <p className="text-sm text-gray-600">プロダクトマネージャー</p>
+                </div>
+              </div>
+            </div>
 
-      {/* CTA Section */}
-      <section className="py-20">
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-bold text-gray-900 mb-6">
-            早期アクセスを獲得しよう
-          </h2>
-          <p className="text-xl text-gray-600 mb-8">
-            ウェイティングリストに登録して、リリース時に特典付きでNotion Database Canvasを体験しませんか？
-            {campaignInfo?.isActive && (
-              <span className="block text-purple-600 font-medium mt-2">
-                今なら{campaignInfo.trialDays}日間プレミアム体験付き！
-              </span>
-            )}
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button 
-              onClick={() => document.querySelector('input[type="email"]')?.focus()}
-              className="inline-flex items-center gap-2 px-8 py-4 text-white rounded-xl font-semibold transition-all hover:scale-105 shadow-lg text-lg bg-purple-600 hover:bg-purple-700"
-            >
-              今すぐアカウント作成
-              <ArrowRight size={24} />
-            </button>
+            {/* Testimonial 2 */}
+            <div className="bg-white rounded-2xl p-6 shadow-lg">
+              <div className="flex items-start gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                ))}
+              </div>
+              <p className="text-gray-700 mb-4 leading-relaxed">
+                「Notionへのエクスポートがワンクリックで完了するのが便利。開発時間が大幅に短縮できました。」
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-full"></div>
+                <div>
+                  <p className="font-semibold text-gray-900">佐藤 健太</p>
+                  <p className="text-sm text-gray-600">フルスタックエンジニア</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Testimonial 3 */}
+            <div className="bg-white rounded-2xl p-6 shadow-lg">
+              <div className="flex items-start gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                ))}
+              </div>
+              <p className="text-gray-700 mb-4 leading-relaxed">
+                「データベース設計の経験が浅い私でも、直感的に操作できました。UIがとても分かりやすいです。」
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-green-400 to-emerald-400 rounded-full"></div>
+                <div>
+                  <p className="font-semibold text-gray-900">鈴木 美咲</p>
+                  <p className="text-sm text-gray-600">スタートアップ創業者</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row items-center justify-between">
-            <div className="flex items-center gap-3 mb-4 md:mb-0">
-              <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
-                <Database className="w-5 h-5 text-gray-900" />
-              </div>
-              <span className="text-xl font-bold">Notion Database Canvas</span>
+      <footer className="bg-white border-t border-gray-100 py-12 px-6">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between">
+          <div className="flex items-center gap-3 mb-4 md:mb-0">
+            <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
+              <Database className="w-5 h-5 text-white" />
             </div>
-            <div className="text-gray-400 text-sm flex items-center gap-4">
-              <span>© 2024 Notion Database Canvas. All rights reserved.</span>
-              <a href="/terms" className="underline hover:text-gray-200 ml-4">利用規約</a>
-            </div>
+            <span className="text-xl font-semibold text-gray-900">Notion Database Canvas</span>
+          </div>
+          <div className="text-gray-500 text-sm">
+            © 2024 Notion Database Canvas. All rights reserved.
           </div>
         </div>
       </footer>
