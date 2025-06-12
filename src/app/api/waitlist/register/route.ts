@@ -50,6 +50,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // ウェルカムメールを送信
+    try {
+      await sendWelcomeEmail(email);
+    } catch (emailError) {
+      console.error('Failed to send welcome email:', emailError);
+      // メール送信が失敗してもウェイトリスト登録は成功とする
+    }
+
     return NextResponse.json({
       success: true,
       message: 'ウェイトリストに登録しました！正式リリース時にご連絡いたします。',
@@ -62,5 +70,52 @@ export async function POST(request: NextRequest) {
       { error: 'サーバーエラーが発生しました' },
       { status: 500 }
     );
+  }
+}
+
+// ウェルカムメール送信関数
+async function sendWelcomeEmail(email: string) {
+  // Resendを使用する場合
+  if (process.env.RESEND_API_KEY) {
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.RESEND_API_KEY}`
+      },
+      body: JSON.stringify({
+        from: 'Notion Database Canvas <noreply@your-domain.com>',
+        to: email,
+        subject: 'ウェイトリスト登録ありがとうございます！',
+        html: `
+          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+            <h1 style="color: #333;">Notion Database Canvasへようこそ！</h1>
+            
+            <p>この度は、Notion Database Canvasのウェイトリストにご登録いただき、誠にありがとうございます。</p>
+            
+            <p>正式リリース時には、以下の特典をご用意しています：</p>
+            <ul>
+              <li>🎁 30日間の無料トライアル</li>
+              <li>🚀 早期アクセス権</li>
+              <li>💰 特別割引価格（¥320/月）</li>
+            </ul>
+            
+            <p>リリースまでもう少しお待ちください。準備が整い次第、優先的にご案内いたします。</p>
+            
+            <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
+            
+            <p style="color: #666; font-size: 14px;">
+              このメールは ${email} 宛に送信されました。<br>
+              心当たりがない場合は、このメールを削除してください。
+            </p>
+          </div>
+        `
+      })
+    });
+
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(`Failed to send email: ${error}`);
+    }
   }
 }

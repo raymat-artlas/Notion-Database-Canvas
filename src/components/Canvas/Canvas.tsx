@@ -14,6 +14,7 @@ import NotionExportDialog from '@/components/Notion/NotionExportDialog';
 import NotificationModal from '@/components/UI/NotificationModal';
 import { ShareDialog } from '@/components/Canvas/ShareDialog';
 import { useNotification } from '@/hooks/useNotification';
+import { updateCanvasAccessTime, deleteExpiredCanvases } from '@/lib/canvasRetention';
 
 interface CanvasInfo {
   id: string;
@@ -102,6 +103,27 @@ export default function Canvas({
   }, [memo]);
 
   const { settings, updateSettings, resetSettings } = useSettings();
+  
+  // キャンバスアクセス時刻の更新と期限切れチェック
+  useEffect(() => {
+    if (canvasId) {
+      // アクセス時刻を更新
+      updateCanvasAccessTime(canvasId, canvasInfo?.name || 'Untitled Canvas');
+      
+      // 期限切れキャンバスをチェック（無料プランの場合のみ）
+      if (userData?.effective_plan === 'free') {
+        const deletedCount = deleteExpiredCanvases('free');
+        if (deletedCount > 0) {
+          showNotification({
+            type: 'warning',
+            title: '期限切れキャンバスの削除',
+            message: `${deletedCount}個の期限切れキャンバスが削除されました。無料プランでは30日間アクセスがないキャンバスは自動的に削除されます。`,
+            confirmText: 'OK'
+          });
+        }
+      }
+    }
+  }, [canvasId, canvasInfo?.name, userData?.effective_plan, showNotification]);
 
 
 

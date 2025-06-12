@@ -3,6 +3,7 @@ import { Database, Property, Relation, CanvasState } from '@/types';
 import { generateRelationLines } from './useRelationLines';
 import { generateId } from '@/lib/utils';
 import { useAuth } from './useAuth';
+import { updateCanvasModifiedTime } from '@/lib/canvasRetention';
 
 interface HistoryState {
   databases: Database[];
@@ -355,6 +356,11 @@ export const useCanvas = (canvasId?: string) => {
       localStorage.setItem(databasesKey, JSON.stringify(databases));
       localStorage.setItem(relationsKey, JSON.stringify(relations));
       localStorage.setItem(stateKey, JSON.stringify(canvasState));
+      
+      // キャンバスの編集時刻を更新
+      if (canvasId) {
+        updateCanvasModifiedTime(canvasId, 'Canvas');
+      }
       
       console.log('Saved to localStorage:', { 
         databases: databases.length, 
