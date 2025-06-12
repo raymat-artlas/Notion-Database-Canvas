@@ -336,7 +336,7 @@ export default function LandingPage() {
                 </li>
                 <li className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-gray-400 flex-shrink-0" />
-                  <span className="text-gray-300">優先サポート</span>
+                  <span className="text-gray-300">自動保存機能（永久保存）</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-gray-400 flex-shrink-0" />
