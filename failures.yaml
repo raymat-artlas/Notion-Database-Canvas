@@ -1,0 +1,27 @@
+- date: 2024-06-09
+  title: 管理画面ログインで「メールアドレス＋パスワード」必須化の不整合
+  cause: |
+    API側（/api/admin/auth）はメールアドレス＋パスワード両方必須だが、フロントエンド（/admin/page.tsx）はパスワードのみで認証していたため、ログインできない不整合が発生。
+  fix: |
+    ログインフォームにメールアドレス欄を追加し、APIにemail+password両方をPOSTするよう修正。パスワードのローカル一致判定は廃止し、サーバー側認証に統一。
+  background: |
+    認証基盤をSupabaseのadmin_usersテーブル＋API認証に移行した際、旧ローカルパスワード認証のUIが残っていた。
+  notes: |
+    - 今後、API仕様変更時はUI/ロジックの整合性も必ず確認すること
+    - サーバー側認証に統一することでセキュリティ・運用性が向上 
+
+- date: 2025-01-12
+  title: プラン判定でgetEffectivePlan関数を使わずeffective_planを直接参照する問題
+  cause: |
+    useAuth.tsのisPremium計算とprofile/page.tsxのプラン表示で、getEffectivePlan関数を使わずにユーザーのeffective_planカラムを直接参照していた。これによりtrial_expires_atの期限チェックなどの重要なビジネスロジックが無視され、期限切れトライアルでもpremiumとして表示される問題が発生。
+  fix: |
+    1. useAuth.ts:194でisPremium計算をgetEffectivePlan関数使用に変更
+    2. profile/page.tsxで全てのeffective_plan直接参照をgetEffectivePlan関数の結果に置換
+    3. dashboard/page.tsxでrefreshUserのインポート漏れを修正
+    判定ロジックを関数で一元管理することで、期限チェックなどの複雑な条件も正しく処理されるようになった。
+  background: |
+    getEffectivePlan関数は既に存在し、プラン制限チェック機能では正しく使用されていたが、画面表示部分では直接DBの値を参照していた。effective_planカラムはDBの実際の値だが、trial_expires_atとの組み合わせで最終的な有効プランを判定する必要がある。
+  notes: |
+    - 判定ロジックは必ずgetEffectivePlan関数を使用し、effective_planカラムの直接参照は避けること
+    - 新しい画面・コンポーネント追加時は、プラン判定の一貫性を確認すること
+    - ビジネスロジックの分散を防ぐため、共通関数の使用を徹底すること

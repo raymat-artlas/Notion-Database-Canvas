@@ -1,0 +1,48 @@
+{
+  "databases": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440000",
+      "name": "Test Database 1",
+      "x": 100,
+      "y": 100,
+      "color": "#3b82f6",
+      "properties": [
+        {
+          "id": "550e8400-e29b-41d4-a716-446655440001",
+          "name": "Title",
+          "type": "title",
+          "required": true,
+          "order": 0
+        },
+        {
+          "id": "550e8400-e29b-41d4-a716-446655440002", 
+          "name": "Status",
+          "type": "select",
+          "required": false,
+          "order": 1,
+          "options": [
+            {
+              "id": "550e8400-e29b-41d4-a716-446655440003",
+              "name": "Todo",
+              "color": "#gray"
+            },
+            {
+              "id": "550e8400-e29b-41d4-a716-446655440004",
+              "name": "In Progress", 
+              "color": "#blue"
+            }
+          ]
+        }
+      ],
+      "createdAt": "2025-06-07T01:00:00.000Z",
+      "updatedAt": "2025-06-07T01:00:00.000Z"
+    }
+  ],
+  "relations": [],
+  "canvasState": {
+    "zoom": 1.2,
+    "panX": 50,
+    "panY": 75,
+    "selectedIds": []
+  }
+}
