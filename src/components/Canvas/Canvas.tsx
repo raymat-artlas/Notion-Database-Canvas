@@ -60,7 +60,7 @@ export default function Canvas({
   const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
   const [isToolbarVisible, setIsToolbarVisible] = useState(true);
   
-  const { notification, closeNotification, showAlert, showConfirm, showError, showSuccess, showInfo } = useNotification();
+  const { notification, closeNotification, showAlert, showConfirm, showError, showSuccess, showInfo, showNotification } = useNotification();
   
   const canvasData = useCanvas(canvasId);
   const {

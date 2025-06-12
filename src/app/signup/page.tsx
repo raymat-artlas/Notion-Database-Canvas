@@ -88,33 +88,38 @@ function SignupForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-xl border border-gray-200 w-full max-w-lg overflow-hidden">
+    <div className="min-h-screen relative bg-gray-50">
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-slate-900">
+        <div className="absolute inset-0 bg-black/40"></div>
+      </div>
+      
+      <div className="relative min-h-screen flex items-center justify-center p-4">
+        <div className="bg-white/10 backdrop-blur-md rounded-3xl shadow-2xl border border-white/20 w-full max-w-lg overflow-hidden">
 
         {/* ヘッダー */}
-        <div className="px-8 pt-8 pb-6 bg-gradient-to-r from-blue-50 to-indigo-50">
+        <div className="px-8 pt-8 pb-6">
           <div className="flex items-center justify-between mb-6">
             <Link
               href="/access-code"
-              className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
+              className="flex items-center gap-2 text-white/60 hover:text-white transition-colors">
               <ArrowLeft size={20} />
               <span>アクセスコード入力に戻る</span>
             </Link>
           </div>
           
           <div className="text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-xl mb-4">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl mb-4 shadow-lg">
               <UserPlus className="text-white" size={32} />
             </div>
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">
+            <h1 className="text-2xl font-bold text-white mb-2">
               ベータアカウント作成
             </h1>
-            <p className="text-gray-600">
+            <p className="text-white/70">
               Notion Database Canvas クローズドベータ版
             </p>
             {accessCode && (
-              <div className="mt-3 px-3 py-2 bg-green-100 border border-green-300 rounded-lg">
-                <p className="text-sm text-green-800">
+              <div className="mt-3 px-3 py-2 bg-green-500/20 border border-green-400/30 rounded-xl backdrop-blur-sm">
+                <p className="text-sm text-green-300">
                   アクセスコード: <span className="font-mono font-medium">{accessCode}</span>
                 </p>
               </div>
@@ -123,12 +128,12 @@ function SignupForm() {
         </div>
 
         {/* ベータテスター情報 */}
-        <div className="mx-8 mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        <div className="mx-8 mt-4 p-4 bg-blue-500/20 border border-blue-400/30 rounded-xl backdrop-blur-sm">
           <div className="flex items-center gap-3 mb-2">
-            <Users className="w-5 h-5 text-blue-600" />
-            <span className="font-semibold text-blue-900">ベータテスター向け</span>
+            <Users className="w-5 h-5 text-blue-300" />
+            <span className="font-semibold text-blue-200">ベータテスター向け</span>
           </div>
-          <p className="text-sm text-blue-800">
+          <p className="text-sm text-blue-200">
             正式リリース前の限定アクセスをお試しいただけます。
             有効なアクセスコードでアカウントを作成してください。
           </p>
@@ -136,18 +141,18 @@ function SignupForm() {
 
         {/* エラー・成功メッセージ */}
         {error && (
-          <div className="mx-8 mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+          <div className="mx-8 mt-4 p-3 bg-red-500/20 border border-red-400/30 rounded-xl backdrop-blur-sm">
             <div className="flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 text-red-600" />
-              <p className="text-red-600 text-sm">{error}</p>
+              <AlertCircle className="w-4 h-4 text-red-300" />
+              <p className="text-red-300 text-sm">{error}</p>
             </div>
           </div>
         )}
         {success && (
-          <div className="mx-8 mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+          <div className="mx-8 mt-4 p-3 bg-green-500/20 border border-green-400/30 rounded-xl backdrop-blur-sm">
             <div className="flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-green-600" />
-              <p className="text-green-600 text-sm">{success}</p>
+              <CheckCircle className="w-4 h-4 text-green-300" />
+              <p className="text-green-300 text-sm">{success}</p>
             </div>
           </div>
         )}
@@ -157,17 +162,17 @@ function SignupForm() {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* メールアドレス */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
+              <label className="block text-sm font-medium text-white/80 mb-3">
                 メールアドレス
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/40" size={20} />
                 <input
                   type="email"
                   placeholder="example@example.com"
                   value={formData.email}
                   onChange={handleInputChange('email')}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                  className="w-full pl-10 pr-4 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-white placeholder-white/40 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all"
                   required
                   autoFocus
                 />
@@ -176,23 +181,23 @@ function SignupForm() {
 
             {/* パスワード */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
+              <label className="block text-sm font-medium text-white/80 mb-3">
                 パスワード
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/40" size={20} />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   placeholder="6文字以上で入力"
                   value={formData.password}
                   onChange={handleInputChange('password')}
-                  className="w-full pl-10 pr-12 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                  className="w-full pl-10 pr-12 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-white placeholder-white/40 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/40 hover:text-white/60"
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
@@ -201,23 +206,23 @@ function SignupForm() {
 
             {/* パスワード確認 */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
+              <label className="block text-sm font-medium text-white/80 mb-3">
                 パスワード確認
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/40" size={20} />
                 <input
                   type={showConfirmPassword ? 'text' : 'password'}
                   placeholder="パスワードを再入力"
                   value={formData.confirmPassword}
                   onChange={handleInputChange('confirmPassword')}
-                  className="w-full pl-10 pr-12 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                  className="w-full pl-10 pr-12 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-white placeholder-white/40 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/40 hover:text-white/60"
                 >
                   {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
@@ -229,11 +234,11 @@ function SignupForm() {
             <button
               type="submit"
               disabled={isLoading}
-              className={`w-full py-3 px-4 rounded-lg font-semibold text-white transition-all duration-200 ${
+              className={`w-full py-3 px-4 rounded-xl font-semibold transition-all duration-200 ${
                 isLoading
-                  ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-blue-600 hover:bg-blue-700 hover:scale-105'
-              } shadow-lg`}
+                  ? 'bg-gray-600 cursor-not-allowed text-gray-300'
+                  : 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-lg hover:shadow-xl'
+              }`}
             >
               {isLoading ? (
                 <div className="flex items-center justify-center gap-2">
@@ -251,13 +256,14 @@ function SignupForm() {
 
           {/* ログインリンク */}
           <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-white/60">
               既にアカウントをお持ちですか？{' '}
-              <Link href="/login" className="text-blue-600 hover:text-blue-700 font-medium">
+              <Link href="/login" className="text-purple-400 hover:text-purple-300 font-medium">
                 ログイン
               </Link>
             </p>
           </div>
+        </div>
         </div>
       </div>
     </div>
