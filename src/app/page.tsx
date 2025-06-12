@@ -166,11 +166,9 @@ export default function Home() {
               </h3>
               <p className="text-gray-600 mb-5 text-center text-sm">
                 正式リリース時にアカウント作成のご案内をお送りします
-                {campaignInfo?.isActive && (
-                  <span className="block text-purple-600 font-medium mt-1">
-                    {campaignInfo.trialDays}日間の無料体験付き
-                  </span>
-                )}
+                <span className="block text-purple-600 font-medium mt-1">
+                  30日間のプレミアム体験付き
+                </span>
               </p>
               
               <form onSubmit={handleWaitlistSubmit} className="space-y-4">

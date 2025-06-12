@@ -1,8 +1,14 @@
-// キャンペーン設定
+// シンプルなウェイトリスト設定
+export const WAITLIST_CONFIG = {
+  trialDays: 30,
+  description: 'ウェイトリスト登録でリリース時に30日間のプレミアム体験をプレゼント'
+}
+
+// キャンペーン設定（無効化）
 export const CAMPAIGN_CONFIG = {
   // ウェイティングリスト自動体験キャンペーン
   autoTrial: {
-    enabled: true,
+    enabled: false,  // キャンペーン無効化
     name: 'ウェイティングリスト限定体験',
     startDate: '2025-06-09T00:00:00Z',  // UTC時刻で指定
     endDate: '2025-12-31T23:59:59Z',
