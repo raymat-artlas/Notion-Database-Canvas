@@ -84,7 +84,7 @@ async function sendWelcomeEmail(email: string) {
         'Authorization': `Bearer ${process.env.RESEND_API_KEY}`
       },
       body: JSON.stringify({
-        from: 'Notion Database Canvas <noreply@your-domain.com>',
+        from: 'Notion Database Canvas <noreply@artlas.jp>',
         to: email,
         subject: 'ウェイトリスト登録ありがとうございます！',
         html: `
