@@ -140,11 +140,11 @@ export default function LandingPage() {
                   </div>
                   <div className="flex items-center gap-2 bg-white/60 p-3 rounded-xl">
                     <CheckCircle className="w-5 h-5 text-green-600" />
-                    <span className="font-medium">高度なエクスポート機能</span>
+                    <span className="font-medium">無制限のエクスポート回数</span>
                   </div>
                   <div className="flex items-center gap-2 bg-white/60 p-3 rounded-xl">
                     <CheckCircle className="w-5 h-5 text-green-600" />
-                    <span className="font-medium">チーム共有機能</span>
+                    <span className="font-medium">キャンバスの永久保存</span>
                   </div>
                 </div>
               </div>

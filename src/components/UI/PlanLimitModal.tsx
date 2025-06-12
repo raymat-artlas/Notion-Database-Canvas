@@ -72,9 +72,9 @@ export default function PlanLimitModal({
             <div className="space-y-2">
               {[
                 'キャンバス作成数：無制限',
-                'ダウンロード機能：無制限',
-                'エクスポート回数：無制限',
-                'クラウドバックアップ：対応'
+                'Notionエクスポート：無制限',
+                '高度なプロパティタイプ',
+                'キャンバスの永久保存'
               ].map((benefit, index) => (
                 <div key={index} className="flex items-center gap-2">
                   <div className="w-4 h-4 bg-green-100 rounded-full flex items-center justify-center">

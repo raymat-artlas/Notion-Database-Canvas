@@ -149,8 +149,8 @@ export default function Home() {
                 </p>
                 <div className="flex items-center justify-center gap-4 text-sm text-gray-500">
                   <span>✓ 無制限キャンバス作成</span>
-                  <span>✓ 高度なエクスポート機能</span>
-                  <span>✓ チーム共有機能</span>
+                  <span>✓ 無制限のエクスポート回数</span>
+                  <span>✓ キャンバスの永久保存</span>
                 </div>
                 <div className="flex items-center justify-center gap-1 mt-3 text-xs text-purple-600">
                   <Clock className="w-3 h-3" />
