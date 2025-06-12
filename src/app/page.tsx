@@ -129,9 +129,9 @@ export default function Home() {
             </h1>
             
             <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-              Notion Database Canvasは、直感的なドラッグ&ドロップでデータベースを設計できる
+              Notionデータベースは強力ですが、複雑な構造を設計するのは困難です。
               <br className="hidden md:block" />
-              革新的なビジュアルツールです。複雑なリレーションも美しく表現。
+              Database Canvasなら、直感的なビジュアル設計で、この問題を解決します。
             </p>
 
             {/* ウェイティングリスト特典 */}
@@ -160,14 +160,22 @@ export default function Home() {
             )}
 
             {/* ウェイティングリスト登録フォーム */}
-            <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-lg mb-8 max-w-lg mx-auto">
-              <h3 className="text-lg font-semibold text-gray-900 mb-3 text-center">
-                ウェイティングリストに登録
-              </h3>
-              <p className="text-gray-600 mb-5 text-center text-sm">
-                正式リリース時にアカウント作成のご案内をお送りします
-                <span className="block text-purple-600 font-medium mt-1">
-                  30日間のプレミアム体験付き
+            <div className="bg-gradient-to-br from-blue-50 via-purple-50 to-cyan-50 border-2 border-blue-200 rounded-3xl p-8 shadow-2xl mb-8 max-w-2xl mx-auto relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500"></div>
+              
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <div className="p-2 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl">
+                  <Sparkles className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900">
+                  🚀 早期アクセス登録
+                </h3>
+              </div>
+              
+              <p className="text-gray-700 mb-6 text-center text-lg leading-relaxed">
+                Notionデータベース設計の<span className="font-bold text-blue-600">革命</span>が始まります
+                <span className="block text-purple-600 font-bold text-xl mt-2">
+                  🎁 30日間プレミアム体験 + 優先アクセス権
                 </span>
               </p>
               
@@ -186,10 +194,10 @@ export default function Home() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className={`w-full py-3 rounded-lg font-medium text-white transition-all ${
+                  className={`w-full py-4 rounded-xl font-bold text-lg text-white transition-all transform ${
                     isSubmitting
                       ? 'bg-gray-400 cursor-not-allowed'
-                      : 'bg-blue-600 hover:bg-blue-700 hover:shadow-lg'
+                      : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 hover:scale-105 shadow-xl hover:shadow-2xl'
                   }`}
                 >
                   {isSubmitting ? (
@@ -198,7 +206,10 @@ export default function Home() {
                       <span>登録中...</span>
                     </div>
                   ) : (
-                    '無料で登録する'
+                    <div className="flex items-center justify-center gap-2">
+                      <Zap className="w-5 h-5" />
+                      <span>🚀 今すぐ早期アクセス登録</span>
+                    </div>
                   )}
                 </button>
               </form>

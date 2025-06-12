@@ -113,9 +113,9 @@ export default function LandingPage() {
             </h1>
             
             <p className="text-xl md:text-2xl text-gray-700 mb-10 leading-relaxed max-w-4xl mx-auto">
-              Notion Database Canvasは、直感的なドラッグ&ドロップでデータベースを設計できる
+              Notionデータベースは強力ですが、複雑な構造を設計するのは困難です。
               <br className="hidden md:block" />
-              <span className="font-semibold text-blue-700">革新的なビジュアルツール</span>です。複雑なリレーションも美しく表現。
+              <span className="font-semibold text-blue-700">Notion Database Canvas</span>なら、直感的なビジュアル設計で、この問題を解決します。
             </p>
 
             {/* Campaign Active CTA */}
