@@ -1,0 +1,174 @@
+{
+  "databases": [
+    {
+      "id": "341eef1e-49dc-46fe-9433-16e300bf0540",
+      "name": "New Database",
+      "x": -360.5,
+      "y": 151.5,
+      "color": "#3b82f6",
+      "properties": [
+        {
+          "id": "76e9341a-9147-4053-9b97-ca02ee3305ee",
+          "name": "Name",
+          "type": "title",
+          "required": true,
+          "order": 0
+        },
+        {
+          "id": "6dae52be-9338-4149-9537-802e2879f1d8",
+          "name": "New Property",
+          "type": "relation",
+          "required": false,
+          "order": 1,
+          "relationConfig": {
+            "targetDatabaseId": "40eb9d47-d1f3-499f-a409-4d2e4a0c186a",
+            "isDualProperty": true,
+            "isParent": true,
+            "linkedPropertyId": "330e3477-494f-4e4c-b7e6-da2561fa66b9"
+          }
+        },
+        {
+          "id": "75fecf96-c79c-4157-9674-f1e7c0b0354c",
+          "name": "New Property",
+          "type": "relation",
+          "required": false,
+          "order": 2,
+          "relationConfig": {
+            "targetDatabaseId": "40eb9d47-d1f3-499f-a409-4d2e4a0c186a",
+            "isDualProperty": true,
+            "isParent": true,
+            "linkedPropertyId": "2bd87333-8c87-468e-a2bc-b80d907aeea6"
+          }
+        }
+      ],
+      "createdAt": "2025-06-02T04:40:30.713Z",
+      "updatedAt": "2025-06-02T06:12:59.900Z"
+    },
+    {
+      "id": "40eb9d47-d1f3-499f-a409-4d2e4a0c186a",
+      "name": "New Database",
+      "x": 65.5,
+      "y": 157.5,
+      "color": "#3b82f6",
+      "properties": [
+        {
+          "id": "04200d14-4059-472e-932d-7697f54f51d7",
+          "name": "Name",
+          "type": "title",
+          "required": true,
+          "order": 0
+        },
+        {
+          "id": "330e3477-494f-4e4c-b7e6-da2561fa66b9",
+          "name": "New Database",
+          "type": "relation",
+          "required": false,
+          "order": 1,
+          "relationConfig": {
+            "targetDatabaseId": "341eef1e-49dc-46fe-9433-16e300bf0540",
+            "isDualProperty": true,
+            "isParent": false,
+            "linkedPropertyId": "6dae52be-9338-4149-9537-802e2879f1d8"
+          }
+        },
+        {
+          "id": "2bd87333-8c87-468e-a2bc-b80d907aeea6",
+          "name": "New Database",
+          "type": "relation",
+          "required": false,
+          "order": 2,
+          "relationConfig": {
+            "targetDatabaseId": "341eef1e-49dc-46fe-9433-16e300bf0540",
+            "isDualProperty": true,
+            "isParent": false,
+            "linkedPropertyId": "75fecf96-c79c-4157-9674-f1e7c0b0354c"
+          }
+        },
+        {
+          "id": "d9fabe6e-b318-494e-9da3-c8a436cc60ac",
+          "name": "New Property",
+          "type": "relation",
+          "required": false,
+          "order": 3,
+          "relationConfig": {
+            "targetDatabaseId": "649e5921-f1ff-4c02-9c91-ac4621e6903f",
+            "isDualProperty": true,
+            "isParent": true,
+            "linkedPropertyId": "325d89b8-bdfe-45f9-a995-2bd07c4c4755"
+          }
+        }
+      ],
+      "createdAt": "2025-06-02T04:46:40.609Z",
+      "updatedAt": "2025-06-02T06:13:13.833Z"
+    },
+    {
+      "id": "649e5921-f1ff-4c02-9c91-ac4621e6903f",
+      "name": "New Database",
+      "x": 443.5,
+      "y": 296.5,
+      "color": "#3b82f6",
+      "properties": [
+        {
+          "id": "29a211ef-c1b7-4734-9ad9-85c1c3024d05",
+          "name": "Name",
+          "type": "title",
+          "required": true,
+          "order": 0
+        },
+        {
+          "id": "325d89b8-bdfe-45f9-a995-2bd07c4c4755",
+          "name": "New Database",
+          "type": "relation",
+          "required": false,
+          "order": 1,
+          "relationConfig": {
+            "targetDatabaseId": "40eb9d47-d1f3-499f-a409-4d2e4a0c186a",
+            "isDualProperty": true,
+            "isParent": false,
+            "linkedPropertyId": "d9fabe6e-b318-494e-9da3-c8a436cc60ac"
+          }
+        }
+      ],
+      "createdAt": "2025-06-02T06:13:01.389Z",
+      "updatedAt": "2025-06-02T06:13:16.278Z"
+    }
+  ],
+  "relations": [
+    {
+      "id": "341eef1e-49dc-46fe-9433-16e300bf0540-6dae52be-9338-4149-9537-802e2879f1d8-40eb9d47-d1f3-499f-a409-4d2e4a0c186a-330e3477-494f-4e4c-b7e6-da2561fa66b9",
+      "fromDatabaseId": "341eef1e-49dc-46fe-9433-16e300bf0540",
+      "toDatabaseId": "40eb9d47-d1f3-499f-a409-4d2e4a0c186a",
+      "type": "dual",
+      "fromPropertyName": "New Property",
+      "toPropertyName": "New Database",
+      "fromPropertyId": "6dae52be-9338-4149-9537-802e2879f1d8",
+      "toPropertyId": "330e3477-494f-4e4c-b7e6-da2561fa66b9"
+    },
+    {
+      "id": "341eef1e-49dc-46fe-9433-16e300bf0540-75fecf96-c79c-4157-9674-f1e7c0b0354c-40eb9d47-d1f3-499f-a409-4d2e4a0c186a-2bd87333-8c87-468e-a2bc-b80d907aeea6",
+      "fromDatabaseId": "341eef1e-49dc-46fe-9433-16e300bf0540",
+      "toDatabaseId": "40eb9d47-d1f3-499f-a409-4d2e4a0c186a",
+      "type": "dual",
+      "fromPropertyName": "New Property",
+      "toPropertyName": "New Database",
+      "fromPropertyId": "75fecf96-c79c-4157-9674-f1e7c0b0354c",
+      "toPropertyId": "2bd87333-8c87-468e-a2bc-b80d907aeea6"
+    },
+    {
+      "id": "40eb9d47-d1f3-499f-a409-4d2e4a0c186a-d9fabe6e-b318-494e-9da3-c8a436cc60ac-649e5921-f1ff-4c02-9c91-ac4621e6903f-325d89b8-bdfe-45f9-a995-2bd07c4c4755",
+      "fromDatabaseId": "40eb9d47-d1f3-499f-a409-4d2e4a0c186a",
+      "toDatabaseId": "649e5921-f1ff-4c02-9c91-ac4621e6903f",
+      "type": "dual",
+      "fromPropertyName": "New Property",
+      "toPropertyName": "New Database",
+      "fromPropertyId": "d9fabe6e-b318-494e-9da3-c8a436cc60ac",
+      "toPropertyId": "325d89b8-bdfe-45f9-a995-2bd07c4c4755"
+    }
+  ],
+  "canvasState": {
+    "zoom": 0.74292086136478,
+    "panX": 523.0262623393191,
+    "panY": 157.51166074720913,
+    "selectedIds": []
+  }
+}
