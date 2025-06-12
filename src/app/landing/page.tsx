@@ -24,7 +24,7 @@ export default function LandingPage() {
               <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
                 <Database className="w-6 h-6 text-white" />
               </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">Database Canvas</span>
+              <span className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">Notion Database Canvas</span>
             </div>
 
             {/* Desktop Navigation */}
@@ -113,7 +113,7 @@ export default function LandingPage() {
             </h1>
             
             <p className="text-xl md:text-2xl text-gray-700 mb-10 leading-relaxed max-w-4xl mx-auto">
-              Database Canvasは、直感的なドラッグ&ドロップでデータベースを設計できる
+              Notion Database Canvasは、直感的なドラッグ&ドロップでデータベースを設計できる
               <br className="hidden md:block" />
               <span className="font-semibold text-blue-700">革新的なビジュアルツール</span>です。複雑なリレーションも美しく表現。
             </p>
@@ -198,7 +198,7 @@ export default function LandingPage() {
               <Sparkles className="w-5 h-5" />
               <span>なぜ選ばれるのか</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 to-blue-900 bg-clip-text text-transparent mb-6">Database Canvasの特徴</h2>
+            <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 to-blue-900 bg-clip-text text-transparent mb-6">Notion Database Canvasの特徴</h2>
             <p className="text-xl md:text-2xl text-gray-700 max-w-3xl mx-auto">従来のER図ツールを超えた、<span className="font-semibold text-blue-700">次世代のデータベース設計体験</span></p>
           </div>
 
@@ -378,7 +378,7 @@ export default function LandingPage() {
               {
                 name: "田中太郎",
                 role: "フルスタック開発者",
-                comment: "ER図ツールで苦労していた複雑なリレーションも、Database Canvasなら直感的に設計できます。",
+                comment: "ER図ツールで苦労していた複雑なリレーションも、Notion Database Canvasなら直感的に設計できます。",
                 rating: 5
               },
               {
@@ -390,7 +390,7 @@ export default function LandingPage() {
               {
                 name: "鈴木一郎",
                 role: "スタートアップCTO",
-                comment: "プロトタイプから本格運用まで、すべてのフェーズでDatabase Canvasが活躍しています。",
+                comment: "プロトタイプから本格運用まで、すべてのフェーズでNotion Database Canvasが活躍しています。",
                 rating: 5
               }
             ].map((testimonial, index) => (
@@ -420,11 +420,11 @@ export default function LandingPage() {
             <span>今すぐ始める</span>
           </div>
           <h2 className="text-4xl md:text-6xl font-bold text-white mb-8 leading-tight">
-            Database Canvas で
+            Notion Database Canvas で
             <span className="block text-yellow-300">未来のDB設計を</span>
           </h2>
           <p className="text-xl md:text-2xl text-white/90 mb-12 leading-relaxed">
-            無料でDatabase Canvasを体験してみませんか？
+            無料でNotion Database Canvasを体験してみませんか？
             <br className="hidden md:block" />
             <span className="font-semibold">アクセスコードで簡単</span>にアカウント作成できます。
           </p>
@@ -456,13 +456,13 @@ export default function LandingPage() {
                 <Database className="w-7 h-7 text-white" />
               </div>
               <div>
-                <span className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">Database Canvas</span>
+                <span className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">Notion Database Canvas</span>
                 <div className="text-gray-400 text-sm">次世代のデータベース設計ツール</div>
               </div>
             </div>
             <div className="text-center md:text-right">
               <div className="text-gray-300 text-lg font-medium mb-2">
-                © 2024 Database Canvas. All rights reserved.
+                © 2024 Notion Database Canvas. All rights reserved.
               </div>
               <div className="text-gray-500 text-sm">
                 Made with ❤️ for developers

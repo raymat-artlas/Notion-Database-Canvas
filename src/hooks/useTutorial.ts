@@ -221,7 +221,7 @@ export const TUTORIAL_CONFIGS = {
       {
         id: 'welcome',
         target: '[data-tutorial="dashboard-header"]',
-        title: 'Database Canvasへようこそ！',
+        title: 'Notion Database Canvasへようこそ！',
         content: 'ここではデータベースの設計を視覚的に行うことができます。まずは基本的な使い方を覚えましょう。',
         position: 'bottom' as const,
       },

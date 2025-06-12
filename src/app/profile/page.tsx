@@ -530,7 +530,7 @@ export default function ProfilePage() {
                     <div className="flex justify-between items-center">
                       <span className="text-sm font-medium text-gray-900">キャンバス</span>
                       <span className="text-sm text-gray-500">
-                        {userData.canvas_count} / {isPremium ? '無制限' : '3'}
+                        {userData.canvas_count} / {isPremium ? '無制限' : '2'}
                       </span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2">
@@ -538,14 +538,14 @@ export default function ProfilePage() {
                         className={`h-2 rounded-full ${
                           isPremium 
                             ? 'bg-purple-600' 
-                            : userData.canvas_count >= 3 
+                            : userData.canvas_count >= 2 
                               ? 'bg-red-500' 
                               : 'bg-blue-600'
                         }`}
                         style={{
                           width: isPremium 
                             ? '100%' 
-                            : `${Math.min((userData.canvas_count / 3) * 100, 100)}%`
+                            : `${Math.min((userData.canvas_count / 2) * 100, 100)}%`
                         }}
                       ></div>
                     </div>

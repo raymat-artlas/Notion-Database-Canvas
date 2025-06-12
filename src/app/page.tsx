@@ -68,7 +68,7 @@ export default function Home() {
               <div className="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center">
                 <Database className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-bold text-gray-900">Database Canvas</span>
+              <span className="text-xl font-bold text-gray-900">Notion Database Canvas</span>
             </div>
 
             {/* Desktop Navigation */}
@@ -129,7 +129,7 @@ export default function Home() {
             </h1>
             
             <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-              Database Canvasは、直感的なドラッグ&ドロップでデータベースを設計できる
+              Notion Database Canvasは、直感的なドラッグ&ドロップでデータベースを設計できる
               <br className="hidden md:block" />
               革新的なビジュアルツールです。複雑なリレーションも美しく表現。
             </p>
@@ -241,7 +241,7 @@ export default function Home() {
       <section id="features" className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">なぜDatabase Canvasなのか？</h2>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">なぜNotion Database Canvasなのか？</h2>
             <p className="text-xl text-gray-600">従来のER図ツールを超えた、次世代のデータベース設計体験</p>
           </div>
 
@@ -409,7 +409,7 @@ export default function Home() {
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">実際のユーザーの声をお待ちしています</h3>
               <p className="text-lg text-gray-600 mb-6">
-                Database Canvasを使っていただいた感想を、ぜひXでシェアしてください！<br />
+                Notion Database Canvasを使っていただいた感想を、ぜひXでシェアしてください！<br />
                 素晴らしいフィードバックはこちらに掲載させていただきます。
               </p>
               <div className="inline-flex items-center gap-2 px-6 py-3 bg-white rounded-xl shadow-sm border border-gray-200">
@@ -443,7 +443,7 @@ export default function Home() {
             早期アクセスを獲得しよう
           </h2>
           <p className="text-xl text-gray-600 mb-8">
-            ウェイティングリストに登録して、リリース時に特典付きでDatabase Canvasを体験しませんか？
+            ウェイティングリストに登録して、リリース時に特典付きでNotion Database Canvasを体験しませんか？
             {campaignInfo?.isActive && (
               <span className="block text-purple-600 font-medium mt-2">
                 今なら{campaignInfo.trialDays}日間プレミアム体験付き！
@@ -470,10 +470,10 @@ export default function Home() {
               <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
                 <Database className="w-5 h-5 text-gray-900" />
               </div>
-              <span className="text-xl font-bold">Database Canvas</span>
+              <span className="text-xl font-bold">Notion Database Canvas</span>
             </div>
             <div className="text-gray-400 text-sm flex items-center gap-4">
-              <span>© 2024 Database Canvas. All rights reserved.</span>
+              <span>© 2024 Notion Database Canvas. All rights reserved.</span>
               <a href="/terms" className="underline hover:text-gray-200 ml-4">利用規約</a>
             </div>
           </div>

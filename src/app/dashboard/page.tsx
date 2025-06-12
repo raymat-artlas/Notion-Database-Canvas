@@ -743,7 +743,7 @@ export default function Dashboard() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3" data-tutorial="dashboard-header">
               <h1 className="text-xl font-semibold text-gray-900">
-                Database Canvas
+                Notion Database Canvas
               </h1>
             </div>
             

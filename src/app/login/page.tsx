@@ -145,7 +145,7 @@ function LoginForm() {
               ログイン
             </h1>
             <p className="text-gray-600">
-              Database Canvasにアクセス
+              Notion Database Canvasにアクセス
             </p>
           </div>
         </div>

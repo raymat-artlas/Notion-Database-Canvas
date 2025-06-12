@@ -110,7 +110,7 @@ function SignupForm() {
               ベータアカウント作成
             </h1>
             <p className="text-gray-600">
-              Database Canvas クローズドベータ版
+              Notion Database Canvas クローズドベータ版
             </p>
             {accessCode && (
               <div className="mt-3 px-3 py-2 bg-green-100 border border-green-300 rounded-lg">
