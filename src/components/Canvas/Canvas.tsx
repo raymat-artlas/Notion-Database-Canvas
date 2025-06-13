@@ -189,26 +189,16 @@ export default function Canvas({
 
   // Handle wheel events for zooming
   const handleWheel = useCallback((e: WheelEvent) => {
-    console.log('Wheel event:', {
-      metaKey: e.metaKey,
-      ctrlKey: e.ctrlKey,
-      deltaY: e.deltaY,
-      zoomSensitivity: settings.zoomSensitivity
-    });
-    
     // Only zoom when Cmd (Mac) or Ctrl (Windows/Linux) is pressed
     if (e.metaKey || e.ctrlKey) {
       e.preventDefault();
-      console.log('Zoom triggered!');
       
       // カーソル位置を取得
       const rect = canvasRef.current?.getBoundingClientRect();
       if (rect) {
         const mouseX = e.clientX - rect.left;
         const mouseY = e.clientY - rect.top;
-        
         const isZoomIn = e.deltaY < 0;
-        console.log('Calling zoomAtPoint:', { mouseX, mouseY, isZoomIn, sensitivity: settings.zoomSensitivity });
         zoomAtPoint(settings.zoomSensitivity, mouseX, mouseY, isZoomIn);
       }
     }
@@ -216,21 +206,12 @@ export default function Canvas({
 
   // Handle mouse events for panning
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
-    console.log('Canvas handleMouseDown:', {
-      button: e.button,
-      metaKey: e.metaKey,
-      ctrlKey: e.ctrlKey,
-      spaceKey: isSpaceKeyPressedRef.current,
-      target: e.target
-    });
-    
     if (e.button === 1 || (e.button === 0 && (e.metaKey || e.ctrlKey)) || (e.button === 0 && isSpaceKeyPressedRef.current)) { 
       // Middle mouse, Cmd/Ctrl+Left mouse, or Space+Left mouse
       e.preventDefault();
       e.stopPropagation();
       isPanningRef.current = true;
       lastPanPointRef.current = { x: e.clientX, y: e.clientY };
-      console.log('Canvas: Starting pan');
     }
   }, []);
 
@@ -298,7 +279,6 @@ export default function Canvas({
     if (!canvas) return;
 
     canvas.addEventListener('wheel', handleWheel, { passive: false });
-    console.log('Wheel event listener added to canvas');
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
     document.addEventListener('keydown', handleKeyDown);
@@ -361,24 +341,10 @@ export default function Canvas({
           cursor: isPanningRef.current ? 'grabbing' : (isSpaceKeyPressedRef.current ? 'grab' : 'default')
         }}
         onMouseDown={handleMouseDown}
-        onMouseDownCapture={(e) => {
-          // キャプチャーフェーズで⌘+クリックを検出
-          if (e.button === 0 && (e.metaKey || e.ctrlKey)) {
-            console.log('Canvas: Capture phase - pan detected');
-            handleMouseDown(e);
-          }
-        }}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        onWheel={(e) => {
-          console.log('React onWheel event:', {
-            metaKey: e.metaKey,
-            ctrlKey: e.ctrlKey,
-            deltaY: e.deltaY
-          });
-          handleWheel(e.nativeEvent);
-        }}
+        onWheel={(e) => handleWheel(e.nativeEvent)}
       >
         {/* Background Pattern */}
         {settings.backgroundPattern !== 'none' && (

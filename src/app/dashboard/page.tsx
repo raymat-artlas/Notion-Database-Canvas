@@ -105,17 +105,13 @@ export default function Dashboard() {
 
   // 認証チェックとリダイレクト - 遅延あり
   useEffect(() => {
-    console.log('🔍 Dashboard: Auth check effect running...', { loading, isAuthenticated, hasUser: !!user })
-    
     // ローディング中は何もしない
     if (loading) {
-      console.log('⏳ Dashboard: Still loading, waiting...')
       return
     }
     
     // 認証状態が明確になった後、少し遅延してリダイレクト
     if (!isAuthenticated) {
-      console.log('🚑 Dashboard: Not authenticated, redirecting to login after delay...')
       const timeoutId = setTimeout(() => {
         router.push('/login')
       }, 1000) // 1秒遅延
@@ -134,7 +130,6 @@ export default function Dashboard() {
     
     // キャッシュチェック
     if (!forceRefresh && canvasesCache && (now - canvasesCache.timestamp) < CACHE_DURATION) {
-      console.log('📦 Dashboard: Using cached canvas data');
       setCanvases(canvasesCache.data);
       return;
     }
@@ -146,9 +141,7 @@ export default function Dashboard() {
   }, [canvasesCache, canvases]);
 
   useEffect(() => {
-    console.log('🔍 Dashboard: Canvas loading effect running...', { isAuthenticated, hasUser: !!user })
     if (isAuthenticated && user) {
-      console.log('📦 Dashboard: Loading canvases...')
       loadCanvasesWithCache();
     }
   }, [isAuthenticated, user, loadCanvasesWithCache]);
@@ -156,18 +149,14 @@ export default function Dashboard() {
   const loadCanvases = useCallback(async () => {
     // タイムアウトを設定（30秒）
     const timeoutId = setTimeout(() => {
-      console.error('⏱️ loadCanvases: Timeout after 30 seconds, continuing with local data')
       setIsLoadingCanvases(false)
     }, 30000)
 
     try {
       setIsLoadingCanvases(true)
-      console.log('🔍 loadCanvases: Starting canvas loading...')
       // ローカルストレージからキャンバス一覧を読み込み
       const canvasesKey = getUserStorageKey('notion-canvas-list');
-      console.log('🔑 loadCanvases: Using storage key:', canvasesKey)
       const savedCanvases = localStorage.getItem(canvasesKey);
-      console.log('📊 loadCanvases: Local storage result:', savedCanvases ? 'Found data' : 'No data')
       
       if (savedCanvases) {
         const data = JSON.parse(savedCanvases);
@@ -742,7 +731,6 @@ export default function Dashboard() {
 
   // ローディング中 - タイムアウトあり
   if (loading || isLoadingCanvases) {
-    console.log('🔄 Dashboard: Rendering loading state...', { loading, isLoadingCanvases })
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
