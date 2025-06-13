@@ -148,7 +148,7 @@ function getWelcomeEmailHtml(email: string): string {
           <ul style="margin: 0; padding-left: 20px; color: #4b5563;">
             <li style="margin-bottom: 8px;"><strong>30日間無料トライアル</strong> - 全機能をお試しいただけます</li>
             <li style="margin-bottom: 8px;"><strong>優先アクセス権</strong> - 正式リリース時に最優先でご案内</li>
-            <li style="margin-bottom: 8px;"><strong>特別価格</strong> - 通常¥500/月 → <span style="color: #8b5cf6; font-weight: bold;">¥320/月</span></li>
+            <li style="margin-bottom: 8px;"><strong>月額プラン</strong> - <span style="color: #8b5cf6; font-weight: bold;">¥320/月</span></li>
           </ul>
         </div>
       </div>
