@@ -158,9 +158,16 @@ export default function Home() {
           />
           */}
           
-          {/* 現在の仮背景 */}
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-slate-900">
-            <div className="absolute inset-0 opacity-30">
+          {/* 背景画像 */}
+          <img 
+            src="/hero-bg.png" 
+            alt="Notion Database Canvas" 
+            className="absolute inset-0 w-full h-full object-cover opacity-40"
+          />
+          
+          {/* グラデーションオーバーレイ */}
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-900/90 via-gray-800/90 to-slate-900/90">
+            <div className="absolute inset-0 opacity-30" style={{ display: 'none' }}>
               {/* Canvas Grid Background */}
               <div className="w-full h-full bg-[linear-gradient(to_right,#e5e7eb_1px,transparent_1px),linear-gradient(to_bottom,#e5e7eb_1px,transparent_1px)] bg-[size:24px_24px]"></div>
               
