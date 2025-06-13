@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { User as SupabaseUser } from '@supabase/supabase-js'
 import { supabase } from '@/lib/supabase'
 import { getCurrentUser, signOut } from '@/lib/auth'
@@ -18,11 +18,30 @@ export function useAuth() {
     loading: true,
     error: null
   })
+  
+  // タブ切り替えによる重複処理を防ぐ
+  const lastAuthCheckRef = useRef<number>(0)
+  const isAuthCheckingRef = useRef<boolean>(false)
 
   // ユーザー情報を取得・更新
   const refreshUser = useCallback(async (forceRefresh = false) => {
+    // 短時間での重複実行を防ぐ（500ms以内は無視）
+    const now = Date.now()
+    if (!forceRefresh && now - lastAuthCheckRef.current < 500) {
+      console.log('🔄 useAuth: Skipping refresh - too recent')
+      return
+    }
+    
+    // 既に実行中の場合は無視
+    if (isAuthCheckingRef.current && !forceRefresh) {
+      console.log('🔄 useAuth: Skipping refresh - already in progress')
+      return
+    }
+    
     try {
-      console.log('🔄🔄🔄 useAuth: refreshUser CALLED!!!', { forceRefresh })
+      console.log('🔄 useAuth: refreshUser started', { forceRefresh })
+      isAuthCheckingRef.current = true
+      lastAuthCheckRef.current = now
       setAuthState(prev => ({ ...prev, loading: true, error: null }))
       
       // 強制リフレッシュの場合はセッションを更新
@@ -88,6 +107,8 @@ export function useAuth() {
         loading: false,
         error: errorMessage
       })
+    } finally {
+      isAuthCheckingRef.current = false
     }
   }, [])
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Plus, Shield, Settings, LogOut, Eye, Edit2, Trash2, Copy, Calendar, Clock, ExternalLink, User, Key, BookOpen, CheckCircle, Crown, Sparkles } from 'lucide-react';
 import Link from 'next/link';
@@ -124,16 +124,36 @@ export default function Dashboard() {
     }
   }, [loading, isAuthenticated, router, user]);
 
-  // キャンバス一覧を読み込み
+  // キャンバス一覧のキャッシュ
+  const [canvasesCache, setCanvasesCache] = useState<{ data: Canvas[], timestamp: number } | null>(null);
+  const CACHE_DURATION = 5 * 60 * 1000; // 5分
+
+  // キャンバス一覧を読み込み（キャッシュ付き）
+  const loadCanvasesWithCache = useCallback(async (forceRefresh = false) => {
+    const now = Date.now();
+    
+    // キャッシュチェック
+    if (!forceRefresh && canvasesCache && (now - canvasesCache.timestamp) < CACHE_DURATION) {
+      console.log('📦 Dashboard: Using cached canvas data');
+      setCanvases(canvasesCache.data);
+      return;
+    }
+    
+    await loadCanvases();
+    
+    // キャッシュを更新
+    setCanvasesCache({ data: canvases, timestamp: now });
+  }, [canvasesCache, canvases]);
+
   useEffect(() => {
     console.log('🔍 Dashboard: Canvas loading effect running...', { isAuthenticated, hasUser: !!user })
     if (isAuthenticated && user) {
       console.log('📦 Dashboard: Loading canvases...')
-      loadCanvases();
+      loadCanvasesWithCache();
     }
-  }, [isAuthenticated, user]);
+  }, [isAuthenticated, user, loadCanvasesWithCache]);
 
-  const loadCanvases = async () => {
+  const loadCanvases = useCallback(async () => {
     // タイムアウトを設定（30秒）
     const timeoutId = setTimeout(() => {
       console.error('⏱️ loadCanvases: Timeout after 30 seconds, continuing with local data')
@@ -225,7 +245,7 @@ export default function Dashboard() {
       clearTimeout(timeoutId)
       setIsLoadingCanvases(false)
     }
-  };
+  }, [user]);
 
   // ユーザー固有のキーを取得
   const getUserStorageKey = (baseKey: string) => {
@@ -445,7 +465,7 @@ export default function Dashboard() {
           })
         });
 
-        loadCanvases();
+        loadCanvasesWithCache(true);
         
         // ユーザーデータを更新してプラン制限が正しく反映されるようにする
         if (refreshUser) {
@@ -622,7 +642,7 @@ export default function Dashboard() {
           });
         }
         
-        loadCanvases();
+        loadCanvasesWithCache(true);
         
         // ユーザーデータを更新してプラン制限が正しく反映されるようにする
         if (refreshUser) {
@@ -637,8 +657,8 @@ export default function Dashboard() {
     }
   };
 
-  // ログアウト
-  const handleLogout = async () => {
+  // ログアウト（メモ化）
+  const handleLogout = useCallback(async () => {
     try {
       const { signOut } = await import('@/lib/auth');
       await signOut();
@@ -648,10 +668,10 @@ export default function Dashboard() {
       // フォールバック
       window.location.href = '/';
     }
-  };
+  }, [router]);
 
-  // 日時フォーマット
-  const formatDate = (dateString: string) => {
+  // 日時フォーマット（メモ化）
+  const formatDate = useCallback((dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('ja-JP', {
       year: 'numeric',
@@ -660,7 +680,7 @@ export default function Dashboard() {
       hour: '2-digit',
       minute: '2-digit'
     });
-  };
+  }, []);
 
   // インライン編集を開始
   const startInlineEdit = (canvasId: string, fieldType: 'name' | 'description', currentValue: string) => {
@@ -689,7 +709,7 @@ export default function Dashboard() {
       });
 
       if (response.ok) {
-        loadCanvases();
+        loadCanvasesWithCache(true);
       }
     } catch (error) {
       console.error('Failed to update canvas:', error);
@@ -706,6 +726,19 @@ export default function Dashboard() {
     setEditingFieldType(null);
     setEditingValue('');
   };
+
+  // ソートされたキャンバス（メモ化）
+  const sortedCanvases = useMemo(() => {
+    return [...canvases].sort((a, b) => 
+      new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+    );
+  }, [canvases]);
+
+  // プラン表示情報（メモ化）
+  const planDisplayInfo = useMemo(() => {
+    if (!userData) return null;
+    return getPlanDisplayInfo(userData);
+  }, [userData]);
 
   // ローディング中 - タイムアウトあり
   if (loading || isLoadingCanvases) {
@@ -769,21 +802,20 @@ export default function Dashboard() {
                 
                 return (
                   <div className="hidden md:flex items-center gap-4 px-3 py-2 bg-gray-50 rounded-lg" data-tutorial="plan-info">
-                    {(() => {
-                      const planInfo = getPlanDisplayInfo(userData);
-                      const PlanIcon = planInfo.icon;
+                    {planDisplayInfo && (() => {
+                      const PlanIcon = planDisplayInfo.icon;
                       return (
-                        <div className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium ${planInfo.color}`}>
+                        <div className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium ${planDisplayInfo.color}`}>
                           <PlanIcon size={12} />
-                          {planInfo.label}
+                          {planDisplayInfo.label}
                         </div>
                       );
                     })()}
                     <div className="text-xs text-gray-600">
                       {isPremium ? (
-                        <>キャンバス: {canvases.length}/無制限 | エクスポート: {userData.export_count}/無制限</>
+                        <>キャンバス: {sortedCanvases.length}/無制限 | エクスポート: {userData.export_count}/無制限</>
                       ) : (
-                        <>キャンバス: {canvases.length}/2 | エクスポート: {userData.export_count}/10</>
+                        <>キャンバス: {sortedCanvases.length}/2 | エクスポート: {userData.export_count}/10</>
                       )}
                     </div>
                   </div>
@@ -842,7 +874,7 @@ export default function Dashboard() {
 
         {/* キャンバス一覧 */}
         <div data-tutorial="canvas-list">
-        {canvases.length === 0 ? (
+        {sortedCanvases.length === 0 ? (
           <div className="text-center py-12">
             <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
               <Plus className="text-gray-400" size={24} />
@@ -859,7 +891,7 @@ export default function Dashboard() {
           </div>
         ) : (
           <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
-            {canvases.map((canvas, index) => (
+            {sortedCanvases.map((canvas, index) => (
               <div 
                 key={canvas.id} 
                 className={`p-4 hover:bg-gray-50 transition-colors ${index > 0 ? 'border-t border-gray-200' : ''}`}

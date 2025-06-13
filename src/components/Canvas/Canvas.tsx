@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useCallback, useEffect, useState } from 'react';
+import { useRef, useCallback, useEffect, useState, useMemo } from 'react';
 import { useCanvas } from '@/hooks/useCanvas';
 import { useSettings } from '@/hooks/useSettings';
 import { useAuth } from '@/hooks/useAuth';
@@ -86,6 +86,61 @@ export default function Canvas({
     canUndo,
     canRedo
   } = canvasData;
+
+  // メモ化されたデータベース接続ライン
+  const relationLines = useMemo(() => {
+    if (!showRelationLines) return [];
+    return relations.map(relation => ({
+      key: `relation-${relation.id}`,
+      component: (
+        <ConnectionLine
+          key={`relation-${relation.id}`}
+          fromDatabaseId={relation.fromDatabaseId}
+          fromPropertyId={relation.fromPropertyId || ''}
+          toDatabaseId={relation.toDatabaseId}
+          toPropertyId={relation.toPropertyId || ''}
+          type={relation.type === 'formula' ? 'formula' : 'relation'}
+          databases={databases}
+          canvasState={canvasState}
+        />
+      )
+    }));
+  }, [showRelationLines, relations, databases, canvasState]);
+
+  // メモ化されたフォーミュラ依存ライン
+  const formulaLines = useMemo(() => {
+    if (!showRelationLines) return [];
+    return databases.flatMap(database => 
+      database.properties
+        .filter(prop => prop.type === 'formula' && prop.formulaConfig?.referencedProperties)
+        .flatMap(formulaProp => 
+          formulaProp.formulaConfig!.referencedProperties
+            .filter(refProp => !refProp.includes('.'))
+            .map(refProp => {
+              const targetProp = database.properties.find(p => p.name === refProp);
+              if (targetProp) {
+                return {
+                  key: `formula-${formulaProp.id}-${refProp}`,
+                  component: (
+                    <ConnectionLine
+                      key={`formula-${formulaProp.id}-${refProp}`}
+                      fromDatabaseId={database.id}
+                      fromPropertyId={formulaProp.id}
+                      toDatabaseId={database.id}
+                      toPropertyId={targetProp.id}
+                      type="formula"
+                      databases={databases}
+                      canvasState={canvasState}
+                    />
+                  )
+                };
+              }
+              return null;
+            })
+            .filter(Boolean)
+        )
+    );
+  }, [showRelationLines, databases, canvasState]);
   
   // Tutorial (disable while loading)
   const tutorial = useTutorial(TUTORIAL_CONFIGS.CANVAS_FIRST_TIME, { disabled: canvasData.isLoading });
@@ -377,48 +432,10 @@ export default function Canvas({
         <svg className="connections-svg absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0 }}>
           <g style={{ pointerEvents: 'auto' }}>
             {/* Relation connections */}
-            {showRelationLines && relations.map(relation => (
-              <ConnectionLine
-                key={`relation-${relation.id}`}
-                fromDatabaseId={relation.fromDatabaseId}
-                fromPropertyId={relation.fromPropertyId || ''}
-                toDatabaseId={relation.toDatabaseId}
-                toPropertyId={relation.toPropertyId || ''}
-                type={relation.type === 'formula' ? 'formula' : 'relation'}
-                databases={databases}
-                canvasState={canvasState}
-              />
-            ))}
+            {relationLines.map(line => line.component)}
             
             {/* Formula dependency connections (same-database only) */}
-            {showRelationLines && databases.map(database => 
-              database.properties
-                .filter(prop => prop.type === 'formula' && prop.formulaConfig?.referencedProperties)
-                .map(formulaProp => 
-                  formulaProp.formulaConfig!.referencedProperties
-                    .filter(refProp => !refProp.includes('.')) // Only same-database references
-                    .map(refProp => {
-                      // Find the target property in the same database
-                      const targetProp = database.properties.find(p => p.name === refProp);
-                      
-                      if (targetProp) {
-                        return (
-                          <ConnectionLine
-                            key={`formula-${formulaProp.id}-${refProp}`}
-                            fromDatabaseId={database.id}
-                            fromPropertyId={formulaProp.id}
-                            toDatabaseId={database.id}
-                            toPropertyId={targetProp.id}
-                            type="formula"
-                            databases={databases}
-                            canvasState={canvasState}
-                          />
-                        );
-                      }
-                      return null;
-                    })
-                )
-            )}
+            {formulaLines.map(line => line.component)}
           </g>
         </svg>
         
