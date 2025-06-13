@@ -45,7 +45,7 @@ interface PromoCode {
 interface WaitlistUser {
   id: string;
   email: string;
-  registered_at: string;
+  created_at: string;
   source: string;
 }
 
@@ -785,7 +785,7 @@ export default function AdminPanel() {
                     <div className="flex-1">
                       <div className="font-medium mb-1">{item.email}</div>
                       <div className="text-xs text-gray-500">
-                        登録: {new Date(item.registered_at).toLocaleDateString()} | 
+                        登録: {new Date(item.created_at).toLocaleDateString()} | 
                         ソース: {item.source}
                       </div>
                     </div>
