@@ -103,22 +103,18 @@ export default function Dashboard() {
     }
   });
 
-  // 認証チェックとリダイレクト - 遅延あり
+  // 認証チェックとリダイレクト - 初回のみ
   useEffect(() => {
     // ローディング中は何もしない
     if (loading) {
       return
     }
     
-    // 認証状態が明確になった後、少し遅延してリダイレクト
+    // 認証状態が明確になった後、リダイレクト
     if (!isAuthenticated) {
-      const timeoutId = setTimeout(() => {
-        router.push('/login')
-      }, 1000) // 1秒遅延
-      
-      return () => clearTimeout(timeoutId)
+      router.push('/login')
     }
-  }, [loading, isAuthenticated, router, user]);
+  }, [loading, isAuthenticated, router]); // userを依存配列から削除
 
   // キャンバス一覧のキャッシュ
   const [canvasesCache, setCanvasesCache] = useState<{ data: Canvas[], timestamp: number } | null>(null);
@@ -141,10 +137,10 @@ export default function Dashboard() {
   }, [canvasesCache, canvases]);
 
   useEffect(() => {
-    if (isAuthenticated && user) {
+    if (isAuthenticated) {
       loadCanvasesWithCache();
     }
-  }, [isAuthenticated, user, loadCanvasesWithCache]);
+  }, [isAuthenticated, loadCanvasesWithCache]); // userを依存配列から削除
 
   const loadCanvases = useCallback(async () => {
     // タイムアウトを設定（30秒）

@@ -25,50 +25,41 @@ export function useAuth() {
 
   // ユーザー情報を取得・更新
   const refreshUser = useCallback(async (forceRefresh = false) => {
-    // 短時間での重複実行を防ぐ（500ms以内は無視）
+    // ページが非表示の場合は実行しない（タブ切り替え対策）
+    if (!forceRefresh && document.hidden) {
+      return
+    }
+    
+    // 短時間での重複実行を防ぐ（5秒以内は無視）
     const now = Date.now()
-    if (!forceRefresh && now - lastAuthCheckRef.current < 500) {
-      console.log('🔄 useAuth: Skipping refresh - too recent')
+    if (!forceRefresh && now - lastAuthCheckRef.current < 5000) {
       return
     }
     
     // 既に実行中の場合は無視
     if (isAuthCheckingRef.current && !forceRefresh) {
-      console.log('🔄 useAuth: Skipping refresh - already in progress')
       return
     }
     
     try {
-      console.log('🔄 useAuth: refreshUser started', { forceRefresh })
       isAuthCheckingRef.current = true
       lastAuthCheckRef.current = now
       setAuthState(prev => ({ ...prev, loading: true, error: null }))
       
       // 強制リフレッシュの場合はセッションを更新
       if (forceRefresh) {
-        console.log('🔄 useAuth: Force refreshing Supabase session...')
         await supabase.auth.refreshSession()
       }
       
-      console.log('🔄 useAuth: About to call getCurrentUser...')
-      
       // タイムアウト付きでgetCurrentUserを実行
       const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Auth timeout')), 15000)
+        setTimeout(() => reject(new Error('Auth timeout')), 10000)
       )
       
       const result = await Promise.race([
         getCurrentUser(),
         timeoutPromise
       ])
-      
-      console.log('📊 useAuth: getCurrentUser result:', { 
-        hasUser: !!result.user, 
-        hasUserData: !!result.userData,
-        userId: result.user?.id,
-        effectivePlan: result.userData?.effective_plan,
-        planSource: result.userData?.plan_source
-      })
       
       setAuthState({
         user: result.user,
@@ -80,13 +71,8 @@ export function useAuth() {
       // Store user ID in sessionStorage for fallback usage
       if (result.user?.id) {
         sessionStorage.setItem('currentUserId', result.user.id);
-        console.log('📦 useAuth: Stored user ID in session storage:', result.user.id);
       }
-      
-      console.log('✅ useAuth: State updated successfully with userData:', result.userData)
     } catch (error) {
-      console.error('❌ useAuth: Auth refresh error:', error)
-      
       let errorMessage = 'ユーザー情報の取得に失敗しました'
       if (error instanceof Error) {
         // Refresh Tokenエラーの特別処理
@@ -138,102 +124,61 @@ export function useAuth() {
     }
   }, [])
 
-  // 認証状態変更の監視
+  // 初回のみ認証を実行
   useEffect(() => {
-    console.log('🚀 useAuth: Setting up auth state monitoring...')
-    
-    // 初回読み込み - 遅延実行で安定性を向上
-    console.log('🔄 useAuth: Starting initial auth check...')
-    const initialTimeout = setTimeout(() => {
-      console.log('🔄 useAuth: Executing delayed initial refresh...')
-      refreshUser().catch(error => {
-        console.error('❌ useAuth: Initial refresh failed:', error)
-        // 初期認証に失敗した場合は明確にローディング状態を解除
-        setAuthState(prev => ({
-          ...prev,
-          loading: false,
-          error: '認証の初期化に失敗しました。ページを再読み込みしてください。'
-        }))
-      })
-    }, 100) // 100ms遅延
-    
-    // クリーンアップで初期タイムアウトもクリア
-    const cleanup = () => {
-      clearTimeout(initialTimeout)
-    }
+    // 初回読み込み時のみ実行
+    refreshUser().catch(error => {
+      console.error('❌ useAuth: Initial refresh failed:', error)
+      setAuthState(prev => ({
+        ...prev,
+        loading: false,
+        error: '認証の初期化に失敗しました。ページを再読み込みしてください。'
+      }))
+    })
+  }, []) // 依存配列を空にして初回のみ実行
 
-    // 認証状態変更の監視（必要最小限のイベントのみ）
+  // 必要最小限の認証状態変更監視のみ
+  useEffect(() => {
+    // 明示的なログイン・ログアウトのみ監視
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        console.log('🔄 useAuth: Auth state changed:', event, session?.user?.id)
+        // タブ切り替えやトークン更新は無視
+        if (event === 'TOKEN_REFRESHED' || event === 'INITIAL_SESSION') {
+          return
+        }
         
-        if (event === 'SIGNED_IN') {
+        if (event === 'SIGNED_IN' && session?.user) {
           // 明示的なログイン時のみ
-          console.log('✅ useAuth: User signed in, refreshing user data...')
-          setTimeout(() => refreshUser(), 500) // 少し遅延させる
+          setAuthState({
+            user: session.user,
+            userData: null, // 後でrefreshUserで取得
+            loading: false,
+            error: null
+          })
+          // ユーザーデータを取得
+          setTimeout(() => refreshUser(true), 100)
         } else if (event === 'SIGNED_OUT') {
           // ログアウト時
-          console.log('👋 useAuth: User signed out')
-          // Clear stored user ID
           sessionStorage.removeItem('currentUserId');
           localStorage.removeItem('currentUserId');
-          
           setAuthState({
             user: null,
             userData: null,
             loading: false,
             error: null
           })
-        } else if (event === 'INITIAL_SESSION') {
-          // 初期セッション - より慎重にハンドリング
-          console.log('🔍 useAuth: Initial session detected')
-          if (session?.user) {
-            console.log('✅ useAuth: Initial session has user, skipping refresh (already done)')
-            // すでにrefreshUserが呼ばれているので、ここでは呼ばない
-          } else {
-            console.log('❌ useAuth: Initial session has no user')
-            setAuthState({
-              user: null,
-              userData: null,
-              loading: false,
-              error: null
-            })
-          }
-        } else if (event === 'USER_DELETED') {
-          // ユーザーが削除された
-          console.log('🚫 useAuth: User account was deleted')
-          // Clear stored user ID
-          sessionStorage.removeItem('currentUserId');
-          localStorage.removeItem('currentUserId');
-          
-          setAuthState({
-            user: null,
-            userData: null,
-            loading: false,
-            error: 'アカウントが削除されています。新しくアカウントを作成してください。'
-          })
-          // ログインページへリダイレクト
-          window.location.href = '/login?error=account_deleted'
         }
-        // TOKEN_REFRESHEDは無視（タブ切り替えで混乱を避ける）
       }
     )
 
-    return () => {
-      console.log('🧹 useAuth: Cleaning up auth subscription')
-      subscription.unsubscribe()
-    }
+    return () => subscription.unsubscribe()
   }, [refreshUser])
 
   // 長時間ローディング状態を検出して強制リセット
   useEffect(() => {
     if (!authState.loading) return
     
-    console.log('⏰ useAuth: Setting loading timeout (3 seconds)')
     const timeoutId = setTimeout(() => {
-      console.log('⏱️ useAuth: Loading timeout reached, forcing reset')
-      console.log('🔍 useAuth: Current state at timeout:', authState)
-      
       // より積極的にローディング状態を解除
       setAuthState(prev => ({
         user: prev.user,
@@ -241,10 +186,9 @@ export function useAuth() {
         loading: false,
         error: prev.user ? null : '認証の確認に時間がかかっています。ページを再読み込みしてください。'
       }))
-    }, 3000) // 3秒に短縮
+    }, 10000) // 10秒に延長
     
     return () => {
-      console.log('🧹 useAuth: Clearing loading timeout')
       clearTimeout(timeoutId)
     }
   }, [authState.loading])

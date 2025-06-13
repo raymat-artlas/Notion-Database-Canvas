@@ -125,11 +125,14 @@ export function convertToNotionSchema(database: Database) {
       if (prop.type === 'status') {
         // ステータスは特別処理（selectとして作成後手動変換）
         convertedType = 'status';
+        console.log(`🔄 Converting status property "${prop.name}" to select (will need manual conversion)`);
       } else {
         // その他のサポートされないタイプはテキストに変換
         console.log(`⚠️ Converting unsupported property "${prop.name}" (${prop.type}) to text property`);
         convertedType = 'text';
       }
+    } else {
+      console.log(`✅ Property "${prop.name}" (${prop.type}) is fully supported`);
     }
     
     console.log(`✅ Processing supported property: ${prop.name} (${prop.type} -> ${notionType})`);
@@ -246,6 +249,7 @@ export function convertToNotionSchema(database: Database) {
         break;
         
       case 'email':
+        console.log(`📧 Creating email property: ${prop.name}`);
         notionProperty = {
           type: 'email',
           email: {}
@@ -388,7 +392,7 @@ export function convertToNotionSchema(database: Database) {
         
       default:
         // 未対応のタイプはテキストプロパティとして作成
-        console.log(`⚠️ Creating "${prop.name}" (original type: ${prop.type}) as text property`);
+        console.log(`⚠️ Creating "${prop.name}" (original type: ${prop.type}) as text property due to lack of mapping`);
         notionProperty = {
           type: 'rich_text',
           rich_text: {}
@@ -786,7 +790,38 @@ export async function createNotionDatabase(
       if (notionError && typeof notionError === 'object') {
         const error = notionError as any;
         if (error.body) {
-          console.error('Notion API Error Details:', error.body);
+          console.error('Notion API Error Details:', JSON.stringify(error.body, null, 2));
+          
+          // 特定のエラーパターンをチェックして代替案を提示
+          if (error.body.message && error.body.message.includes('email')) {
+            console.log(`🔄 Email property error detected, attempting to convert to text property`);
+            
+            // メールプロパティをテキストに変換して再試行
+            const modifiedProperties = { ...requestPayload.properties };
+            Object.keys(modifiedProperties).forEach(propName => {
+              if (modifiedProperties[propName].type === 'email') {
+                console.log(`🔄 Converting email property "${propName}" to text property`);
+                modifiedProperties[propName] = {
+                  type: 'rich_text',
+                  rich_text: {}
+                };
+              }
+            });
+            
+            // 再試行
+            try {
+              const retryPayload = { ...requestPayload, properties: modifiedProperties };
+              const retryResponse = await client.databases.create(retryPayload);
+              console.log(`✅ Database "${database.name}" created successfully with email->text conversion`);
+              return {
+                success: true,
+                databaseId: retryResponse.id,
+                url: (retryResponse as any).url
+              };
+            } catch (retryError) {
+              console.error(`❌ Retry also failed for "${database.name}":`, retryError);
+            }
+          }
         }
       }
       
