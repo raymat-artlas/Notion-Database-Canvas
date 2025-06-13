@@ -137,7 +137,7 @@ export default function Canvas({
               }
               return null;
             })
-            .filter(Boolean)
+            .filter(Boolean) as { key: string; component: JSX.Element }[]
         )
     );
   }, [showRelationLines, databases, canvasState]);
@@ -187,22 +187,6 @@ export default function Canvas({
   const isSpaceKeyPressedRef = useRef(false);
   const touchStartRef = useRef<{ x: number; y: number; touches: number } | null>(null);
 
-  // Handle wheel events for zooming
-  const handleWheel = useCallback((e: WheelEvent) => {
-    // Only zoom when Cmd (Mac) or Ctrl (Windows/Linux) is pressed
-    if (e.metaKey || e.ctrlKey) {
-      e.preventDefault();
-      
-      // カーソル位置を取得
-      const rect = canvasRef.current?.getBoundingClientRect();
-      if (rect) {
-        const mouseX = e.clientX - rect.left;
-        const mouseY = e.clientY - rect.top;
-        const isZoomIn = e.deltaY < 0;
-        zoomAtPoint(settings.zoomSensitivity, mouseX, mouseY, isZoomIn);
-      }
-    }
-  }, [zoomAtPoint, settings.zoomSensitivity]);
 
   // Handle mouse events for panning
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
@@ -275,23 +259,18 @@ export default function Canvas({
 
   // Add event listeners
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    canvas.addEventListener('wheel', handleWheel, { passive: false });
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
     document.addEventListener('keydown', handleKeyDown);
     document.addEventListener('keyup', handleKeyUp);
 
     return () => {
-      canvas.removeEventListener('wheel', handleWheel);
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
       document.removeEventListener('keydown', handleKeyDown);
       document.removeEventListener('keyup', handleKeyUp);
     };
-  }, [handleWheel, handleMouseMove, handleMouseUp, handleKeyDown, handleKeyUp]);
+  }, [handleMouseMove, handleMouseUp, handleKeyDown, handleKeyUp]);
 
   if (isLoading) {
     return (
@@ -344,7 +323,18 @@ export default function Canvas({
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        onWheel={(e) => handleWheel(e.nativeEvent)}
+        onWheel={(e) => {
+          e.preventDefault();
+          if (e.metaKey || e.ctrlKey) {
+            const rect = canvasRef.current?.getBoundingClientRect();
+            if (rect) {
+              const mouseX = e.clientX - rect.left;
+              const mouseY = e.clientY - rect.top;
+              const isZoomIn = e.deltaY < 0;
+              zoomAtPoint(settings.zoomSensitivity, mouseX, mouseY, isZoomIn);
+            }
+          }
+        }}
       >
         {/* Background Pattern */}
         {settings.backgroundPattern !== 'none' && (

@@ -116,31 +116,6 @@ export default function Dashboard() {
     }
   }, [loading, isAuthenticated, router]); // userを依存配列から削除
 
-  // キャンバス一覧のキャッシュ
-  const [canvasesCache, setCanvasesCache] = useState<{ data: Canvas[], timestamp: number } | null>(null);
-  const CACHE_DURATION = 5 * 60 * 1000; // 5分
-
-  // キャンバス一覧を読み込み（キャッシュ付き）
-  const loadCanvasesWithCache = useCallback(async (forceRefresh = false) => {
-    const now = Date.now();
-    
-    // キャッシュチェック
-    if (!forceRefresh && canvasesCache && (now - canvasesCache.timestamp) < CACHE_DURATION) {
-      setCanvases(canvasesCache.data);
-      return;
-    }
-    
-    await loadCanvases();
-    
-    // キャッシュを更新
-    setCanvasesCache({ data: canvases, timestamp: now });
-  }, [canvasesCache, canvases]);
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      loadCanvasesWithCache();
-    }
-  }, [isAuthenticated, loadCanvasesWithCache]); // userを依存配列から削除
 
   const loadCanvases = useCallback(async () => {
     // タイムアウトを設定（30秒）
@@ -153,6 +128,7 @@ export default function Dashboard() {
       // ローカルストレージからキャンバス一覧を読み込み
       const canvasesKey = getUserStorageKey('notion-canvas-list');
       const savedCanvases = localStorage.getItem(canvasesKey);
+      
       
       if (savedCanvases) {
         const data = JSON.parse(savedCanvases);
@@ -236,6 +212,12 @@ export default function Dashboard() {
   const getUserStorageKey = (baseKey: string) => {
     return user?.id ? `${baseKey}-${user.id}` : baseKey;
   };
+
+  useEffect(() => {
+    if (isAuthenticated && !isLoadingCanvases) {
+      loadCanvases();
+    }
+  }, [isAuthenticated]); // loadCanvasesを依存配列から削除
 
   const [isCreating, setIsCreating] = useState(false);
   const [planLimitModal, setPlanLimitModal] = useState<{
