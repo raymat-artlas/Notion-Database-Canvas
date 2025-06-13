@@ -162,11 +162,11 @@ export default function Home() {
           <img 
             src="/hero-bg.png" 
             alt="Notion Database Canvas" 
-            className="absolute inset-0 w-full h-full object-cover opacity-40"
+            className="absolute inset-0 w-full h-full object-cover opacity-90"
           />
           
           {/* グラデーションオーバーレイ */}
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-900/90 via-gray-800/90 to-slate-900/90">
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-900/60 via-gray-800/60 to-slate-900/60">
             <div className="absolute inset-0 opacity-30" style={{ display: 'none' }}>
               {/* Canvas Grid Background */}
               <div className="w-full h-full bg-[linear-gradient(to_right,#e5e7eb_1px,transparent_1px),linear-gradient(to_bottom,#e5e7eb_1px,transparent_1px)] bg-[size:24px_24px]"></div>
@@ -293,23 +293,12 @@ export default function Home() {
             {/* Block 1 - Visual Design */}
             <div className="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200">
               {/* Content Area */}
-              <div className="aspect-square bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 p-6 relative">
-                <div className="bg-white rounded-lg shadow-md p-4 h-full flex flex-col justify-between">
-                  <div>
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="w-4 h-4 bg-gray-900 rounded-sm"></div>
-                      <span className="text-sm font-medium">テーブル設計</span>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="bg-gray-100 rounded p-2 text-xs">Users テーブル</div>
-                      <div className="bg-gray-100 rounded p-2 text-xs">Projects テーブル</div>
-                      <div className="bg-gray-100 rounded p-2 text-xs">Tasks テーブル</div>
-                    </div>
-                  </div>
-                  <div className="text-xs text-gray-500 mt-4">
-                    ドラッグ&ドロップで直感的に設計
-                  </div>
-                </div>
+              <div className="aspect-square bg-gradient-to-br from-purple-100 via-indigo-50 to-blue-100 p-6 relative flex items-center justify-center">
+                <img 
+                  src="/step1.png" 
+                  alt="ビジュアルデータベース設計" 
+                  className="w-full h-full object-cover rounded-lg"
+                />
               </div>
               
               {/* Description */}
@@ -324,20 +313,12 @@ export default function Home() {
             {/* Block 2 - Notion Integration */}
             <div className="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200">
               {/* Content Area */}
-              <div className="aspect-square bg-gradient-to-br from-blue-50 to-cyan-50 p-6 relative">
-                <div className="bg-white rounded-lg shadow-md p-4 h-full flex flex-col justify-between">
-                  <div>
-                    <div className="text-lg font-bold mb-2">Notionデータベースを<br />ワンクリックで<br />自動生成</div>
-                    <div className="bg-gray-900 h-8 rounded mb-3"></div>
-                    <div className="space-y-1">
-                      <div className="bg-gray-100 h-2 rounded w-3/4"></div>
-                      <div className="bg-gray-100 h-2 rounded w-1/2"></div>
-                    </div>
-                  </div>
-                  <div className="text-xs text-gray-500">
-                    自動エクスポート機能
-                  </div>
-                </div>
+              <div className="aspect-square bg-gradient-to-br from-purple-200 via-violet-100 to-indigo-100 p-6 relative flex items-center justify-center">
+                <img 
+                  src="/step2.png" 
+                  alt="Notionへの自動エクスポート" 
+                  className="w-full h-full object-cover rounded-lg"
+                />
               </div>
               
               {/* Description */}
@@ -352,30 +333,19 @@ export default function Home() {
             {/* Block 3 - Team Collaboration */}
             <div className="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200">
               {/* Content Area */}
-              <div className="aspect-square bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 p-6 relative">
-                <div className="bg-white rounded-lg shadow-md p-4 h-full flex flex-col justify-between">
-                  <div>
-                    <div className="text-lg font-bold mb-2">Notionデータベースを<br />ワンクリックで<br />自動生成</div>
-                    <div className="grid grid-cols-2 gap-2 mb-3">
-                      <div className="bg-orange-200 rounded h-12"></div>
-                      <div className="bg-blue-200 rounded h-12"></div>
-                    </div>
-                    <div className="space-y-1">
-                      <div className="bg-gray-100 h-2 rounded w-full"></div>
-                      <div className="bg-gray-100 h-2 rounded w-2/3"></div>
-                    </div>
-                  </div>
-                  <div className="text-xs text-gray-500">
-                    リアルタイム共同編集
-                  </div>
-                </div>
+              <div className="aspect-square bg-gradient-to-br from-purple-300 via-indigo-200 to-violet-200 p-6 relative flex items-center justify-center">
+                <img 
+                  src="/step3.png" 
+                  alt="完成したNotionデータベース" 
+                  className="w-full h-full object-cover rounded-lg"
+                />
               </div>
               
               {/* Description */}
               <div className="p-6">
-                <h4 className="text-xl font-bold text-gray-900 mb-3">リアルタイム協業</h4>
+                <h4 className="text-xl font-bold text-gray-900 mb-3">完成したデータベース</h4>
                 <p className="text-gray-600 text-sm leading-relaxed">
-                  リアルタイム編集が可能。バージョン管理機能で設計履歴の追跡も簡単に行えます。
+                  設計したデータベースがNotionで完璧に動作。すぐにデータ入力や運用を開始できます。
                 </p>
               </div>
             </div>

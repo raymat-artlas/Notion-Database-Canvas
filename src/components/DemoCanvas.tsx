@@ -175,10 +175,20 @@ export default function DemoCanvas({ useRealData = false }: { useRealData?: bool
     setConnectionKey(prev => prev + 1);
   }, [databases]);
 
-  // No-op handlers for demo mode (read-only)
-  const handleDatabaseDelete = () => {};
-  const handleConnect = () => {};
-  const handleUpdateOtherDatabase = () => {};
+  // Interactive handlers for demo mode
+  const handleDatabaseDelete = (id: string) => {
+    setDatabases(prev => prev.filter(db => db.id !== id));
+  };
+  
+  const handleConnect = () => {
+    // Allow connections in demo mode
+  };
+  
+  const handleUpdateOtherDatabase = (id: string, updates: Partial<DatabaseType>) => {
+    setDatabases(prev => prev.map(db => 
+      db.id === id ? { ...db, ...updates } : db
+    ));
+  };
 
   return (
     <div ref={canvasRef} className="relative w-full h-[400px] bg-gradient-to-br from-gray-50 to-white rounded-xl overflow-hidden shadow-lg border border-gray-200">
@@ -390,10 +400,11 @@ export default function DemoCanvas({ useRealData = false }: { useRealData?: bool
               allDatabases={databases}
               onUpdate={(updates) => handleDatabaseUpdate(database.id, updates)}
               onUpdateOtherDatabase={handleUpdateOtherDatabase}
-              onDelete={handleDatabaseDelete}
+              onDelete={() => handleDatabaseDelete(database.id)}
               onConnect={handleConnect}
               snapToGrid={false}
               confirmPropertyDeletion={false}
+              isDemoMode={true}
             />
           </div>
         </div>
