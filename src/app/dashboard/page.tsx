@@ -79,6 +79,7 @@ interface Canvas {
 export default function Dashboard() {
   const router = useRouter();
   const { user, userData, loading, isAuthenticated, refreshUser } = useAuth();
+  const [isMounted, setIsMounted] = useState(false);
   const [canvases, setCanvases] = useState<Canvas[]>([]);
   const [isLoadingCanvases, setIsLoadingCanvases] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -102,6 +103,11 @@ export default function Dashboard() {
       defaultWorkspace: ''
     }
   });
+
+  // クライアントサイドマウントを追跡
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // 認証チェックとリダイレクト - 初回のみ
   useEffect(() => {
@@ -709,14 +715,14 @@ export default function Dashboard() {
     return getPlanDisplayInfo(userData);
   }, [userData]);
 
-  // ローディング中 - タイムアウトあり
-  if (loading || isLoadingCanvases) {
+  // SSR時は常にローディング状態を表示してHydration Mismatchを防ぐ
+  if (!isMounted || loading || isLoadingCanvases) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
           <p className="text-gray-600 mb-4">
-            {loading ? '認証を確認中...' : 'キャンバスを読み込み中...'}
+            {!isMounted ? '読み込み中...' : loading ? '認証を確認中...' : 'キャンバスを読み込み中...'}
           </p>
           {loading && (
             <p className="text-sm text-gray-500">
