@@ -146,7 +146,7 @@ function getWelcomeEmailHtml(email: string): string {
         <h3 style="color: #374151; margin: 0 0 16px 0;">🎁 早期登録者特典</h3>
         <div style="background: #f3f4f6; padding: 20px; border-radius: 8px;">
           <ul style="margin: 0; padding-left: 20px; color: #4b5563;">
-            <li style="margin-bottom: 8px;"><strong>30日間無料トライアル</strong> - 全機能をお試しいただけます</li>
+            <li style="margin-bottom: 8px;"><strong>7日間無料トライアル</strong> - 全機能をお試しいただけます</li>
             <li style="margin-bottom: 8px;"><strong>優先アクセス権</strong> - 正式リリース時に最優先でご案内</li>
           </ul>
         </div>

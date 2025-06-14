@@ -1,7 +1,7 @@
 // シンプルなウェイトリスト設定
 export const WAITLIST_CONFIG = {
-  trialDays: 30,
-  description: 'ウェイトリスト登録でリリース時に30日間のプレミアム体験をプレゼント'
+  trialDays: 7,
+  description: 'ウェイトリスト登録でリリース時に7日間のプレミアム体験をプレゼント'
 }
 
 // キャンペーン設定（無効化）

@@ -366,11 +366,11 @@ export default function Home() {
               早期登録特典
             </div>
             <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              30日間プレミアム体験
+              7日間プレミアム体験
             </h2>
             <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
               ウェイトリスト登録者には、<br className="hidden md:inline" />
-              リリース時に30日間のプレミアム体験をプレゼント
+              リリース時に7日間のプレミアム体験をプレゼント
             </p>
             
             <div className="flex flex-wrap justify-center gap-6 mb-8">

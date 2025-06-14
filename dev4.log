@@ -22,3 +22,114 @@ Unknown font `Geist`
  ✓ Compiled /_error in 1522ms (1118 modules)
  ✓ Compiled in 274ms (1100 modules)
  GET /dashboard 200 in 151ms
+ GET /dashboard 404 in 322ms
+ ○ Compiling / ...
+ ✓ Compiled / in 1325ms (1198 modules)
+ GET / 200 in 1470ms
+ ○ Compiling /canvas/[id] ...
+ ✓ Compiled /canvas/[id] in 1222ms (1236 modules)
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/.next/server/webpack-runtime.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/.next/server/app/canvas/[id]/page.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/require.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/load-components.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/build/utils.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1225:15)
+    at /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/require-hook.js:55:36
+    at Function._load (node:internal/modules/cjs/loader:1055:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1311:12)
+    at mod.require (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:136:16)
+    at __webpack_require__.f.require (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/.next/server/webpack-runtime.js:267:28)
+    at /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/.next/server/webpack-runtime.js:180:40 {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/.next/server/webpack-runtime.js',
+    '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/.next/server/app/canvas/[id]/page.js',
+    '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/require.js',
+    '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/load-components.js',
+    '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/build/utils.js',
+    '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/dev/static-paths-worker.js',
+    '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/compiled/jest-worker/processChild.js'
+  ],
+  page: '/canvas/186b7bf4-ea26-4934-8231-b51216604463'
+}
+ ✓ Compiled /_error in 97ms (1224 modules)
+ ⨯ Error: Cannot find module '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/.next/server/pages/_document.js'
+Require stack:
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/require.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/load-components.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/build/utils.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/build/swc/options.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/build/swc/index.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/build/next-config-ts/transpile-config.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/config.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/next.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1225:15)
+    at /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/require-hook.js:55:36
+    at Function._load (node:internal/modules/cjs/loader:1055:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1311:12)
+    at mod.require (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:136:16)
+    at requirePage (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/require.js:103:84)
+    at loadComponentsImpl (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/load-components.js:73:38)
+    at DevServer.findPageComponentsImpl (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/next-server.js:732:77)
+    at /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/next-server.js:711:21
+    at /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/lib/trace/tracer.js:171:36
+    at NoopContextManager.with (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854)
+    at /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/lib/trace/tracer.js:153:103
+    at NoopContextManager.with (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NextTracerImpl.trace (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/lib/trace/tracer.js:153:28)
+    at DevServer.findPageComponents (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/next-server.js:706:41)
+    at DevServer.findPageComponents (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/dev/next-dev-server.js:611:32)
+    at async DevServer.renderErrorToResponseImpl (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/base-server.js:2499:26)
+    at async pipe.req.req (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/base-server.js:2424:30)
+    at async DevServer.pipeImpl (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/base-server.js:984:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/next-server.js:296:21)
+    at async DevServer.handleRequestImpl (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/base-server.js:877:17)
+    at async /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/dev/next-dev-server.js:373:20
+    at async Span.traceAsyncFn (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/trace/trace.js:157:20)
+    at async DevServer.handleRequest (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/dev/next-dev-server.js:370:24)
+    at async invokeRender (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/lib/router-server.js:183:21)
+    at async handleRequest (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/lib/router-server.js:360:24)
+    at async requestHandlerImpl (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/lib/router-server.js:384:13)
+    at async Server.requestListener (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/lib/start-server.js:142:13) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/require.js',
+    '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/load-components.js',
+    '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/build/utils.js',
+    '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/build/swc/options.js',
+    '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/build/swc/index.js',
+    '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/build/next-config-ts/transpile-config.js',
+    '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/config.js',
+    '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/next.js',
+    '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ GET /canvas/186b7bf4-ea26-4934-8231-b51216604463 500 in 1599ms
+ ✓ Compiled /_not-found in 137ms (1227 modules)
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 223ms
+ GET /_next/static/chunks/fallback/webpack.js 404 in 195ms
+ GET /_next/static/chunks/fallback/main.js 404 in 54ms
+ GET /_next/static/chunks/fallback/pages/_app.js 404 in 50ms
+ GET /_next/static/chunks/fallback/react-refresh.js 404 in 55ms
+ GET /_next/static/chunks/fallback/pages/_error.js 404 in 50ms
+ GET /_next/static/media/e4af272ccee01ff0-s.p.woff2 404 in 19ms
+ GET /_next/static/media/bb3ef058b751a6ad-s.p.woff2 404 in 22ms
+ ✓ Compiled /favicon.ico in 306ms (607 modules)
+ GET /favicon.ico 200 in 441ms
+[?25h

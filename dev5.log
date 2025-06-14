@@ -1,0 +1,10 @@
+
+> notion-database-canvas@0.1.0 dev
+> next dev -p 3002
+
+  ▲ Next.js 15.0.0
+  - Local:        http://localhost:3002
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 1528ms
