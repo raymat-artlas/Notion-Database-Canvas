@@ -117,8 +117,17 @@ export default function ConnectionLine({
           }
           
           if (bestFromPos && bestToPos) {
-            setFromPos(bestFromPos);
-            setToPos(bestToPos);
+            // Adjust for canvas transformation (already applied to the SVG container)
+            const adjustedFromPos = {
+              x: (bestFromPos.x - canvasState.panX) / canvasState.zoom,
+              y: (bestFromPos.y - canvasState.panY) / canvasState.zoom
+            };
+            const adjustedToPos = {
+              x: (bestToPos.x - canvasState.panX) / canvasState.zoom,
+              y: (bestToPos.y - canvasState.panY) / canvasState.zoom
+            };
+            setFromPos(adjustedFromPos);
+            setToPos(adjustedToPos);
             return;
           }
         }
@@ -189,14 +198,9 @@ export default function ConnectionLine({
         });
       }
       
-      // Apply canvas transformations
-      const fromX = optimalFromPoint.x * canvasState.zoom + canvasState.panX;
-      const fromY = optimalFromPoint.y * canvasState.zoom + canvasState.panY;
-      const toX = optimalToPoint.x * canvasState.zoom + canvasState.panX;
-      const toY = optimalToPoint.y * canvasState.zoom + canvasState.panY;
-      
-      setFromPos({ x: fromX, y: fromY });
-      setToPos({ x: toX, y: toY });
+      // No need to apply canvas transformations here as the SVG is already transformed
+      setFromPos({ x: optimalFromPoint.x, y: optimalFromPoint.y });
+      setToPos({ x: optimalToPoint.x, y: optimalToPoint.y });
     };
 
     // Update positions initially and on changes
