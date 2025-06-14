@@ -45,14 +45,12 @@ export default function NotionExportDialog({ isOpen, onClose, databases, canvasN
   const [isLoadingPages, setIsLoadingPages] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const [exportResult, setExportResult] = useState<any>(null);
-  const [showUnsupportedDialog, setShowUnsupportedDialog] = useState(false);
-  const [unsupportedProperties, setUnsupportedProperties] = useState<Array<{db: string, prop: string, type: string}>>([]);
   const [conversionMessage, setConversionMessage] = useState<string>('');
   const [showConversionInfo, setShowConversionInfo] = useState(false);
   const [userId, setUserId] = useState<string>('');
   const [showPropertyDialog, setShowPropertyDialog] = useState(false);
-  const [propertyAnalysis, setPropertyAnalysis] = useState(null);
-  const [propertyDialogResolve, setPropertyDialogResolve] = useState(null);
+  const [propertyAnalysis, setPropertyAnalysis] = useState<any>(null);
+  const [propertyDialogResolve, setPropertyDialogResolve] = useState<any>(null);
   const [exportProgress, setExportProgress] = useState(0);
 
   useEffect(() => {
@@ -231,17 +229,17 @@ export default function NotionExportDialog({ isOpen, onClose, databases, canvasN
   };
 
   // プロパティ互換性を分析する関数を追加
-  const analyzePropertyCompatibility = (databases) => {
+  const analyzePropertyCompatibility = (databases: Database[]) => {
     const fullySupported = ['title', 'text', 'number', 'checkbox', 'url', 'email', 'phone', 'date', 'select', 'multi-select', 'person', 'files', 'relation', 'formula', 'created_time', 'created_by', 'last_edited_time', 'last_edited_by'];
     const partiallySupported = ['status'];
     const unsupported = ['button', 'id', 'expiry', 'rollup'];
     
     const analysis = {
       totalProperties: 0,
-      supported: [],
-      partiallySupported: [],
-      unsupported: [],
-      conversions: []
+      supported: [] as any[],
+      partiallySupported: [] as any[],
+      unsupported: [] as any[],
+      conversions: [] as string[]
     };
     
     databases.forEach(db => {
@@ -284,7 +282,7 @@ export default function NotionExportDialog({ isOpen, onClose, databases, canvasN
   };
   
   // カスタム確認ダイアログを表示する関数
-  const showPropertyConversionDialog = (analysis) => {
+  const showPropertyConversionDialog = (analysis: any) => {
     return new Promise((resolve) => {
       setPropertyAnalysis(analysis);
       setShowPropertyDialog(true);
@@ -382,7 +380,11 @@ export default function NotionExportDialog({ isOpen, onClose, databases, canvasN
       console.log('🏷️ Database properties:', databases.map(db => ({
         name: db.name,
         id: db.id,
-        properties: db.properties.map(p => ({ name: p.name, type: p.type }))
+        properties: db.properties.map(p => ({ 
+          name: p.name, 
+          type: p.type,
+          options: p.options // オプションもログに含める
+        }))
       })));
       
       const exportPayload = {
@@ -521,24 +523,6 @@ export default function NotionExportDialog({ isOpen, onClose, databases, canvasN
     onClose();
   };
 
-  const clearNotionSettings = async () => {
-    const currentUserId = user?.id || userId || sessionStorage.getItem('currentUserId') || localStorage.getItem('currentUserId');
-    if (!currentUserId) return;
-    
-    try {
-      await fetch(`/api/notion/settings?userId=${encodeURIComponent(currentUserId)}`, {
-        method: 'DELETE'
-      });
-      
-      setApiKey('');
-      setProjectName(generateDefaultName());
-      setConnectionStatus('idle');
-      setPages([]);
-      setSelectedPageId('');
-    } catch (error) {
-      console.error('Failed to clear Notion settings:', error);
-    }
-  };
 
   if (!isOpen) return null;
 

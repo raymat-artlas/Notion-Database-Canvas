@@ -6,6 +6,7 @@ import { Database } from '@/types';
 import { Trash2, Plus, GripVertical, FileText, Edit3, Type, Hash, Calendar, User, Check, Link as LinkIcon, List, Tag, GitBranch, BarChart3, Activity, File, Mail, Phone, Calculator, Clock, UserCheck, MousePointer, Key, Timer, Palette, CircleDot, CheckSquare, Paperclip, AtSign, Zap, Loader, ArrowUpRight, Search, Sigma, Circle, ChevronRight, ChevronDown } from 'lucide-react';
 import PropertyItem from '@/components/Property/PropertyItem';
 import { generateId } from '@/lib/utils';
+import ConfirmDialog from '@/components/UI/ConfirmDialog';
 
 interface DatabaseBoxProps {
   database: Database;
@@ -49,6 +50,7 @@ export default function DatabaseBox({
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [isMounted, setIsMounted] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const boxRef = useRef<HTMLDivElement>(null);
   const selectorRef = useRef<HTMLDivElement>(null);
   const colorPickerRef = useRef<HTMLDivElement>(null);
@@ -190,12 +192,14 @@ export default function DatabaseBox({
       type: propertyType as any,
       required: false,
       order: database.properties.length,
-      ...(propertyType === 'select' || propertyType === 'multi-select' || propertyType === 'status' ? {
+      ...(propertyType === 'status' ? {
         options: [{
           id: generateId(),
-          name: propertyType === 'status' ? 'Not started' : 'Option 1',
-          color: propertyType === 'status' ? '#94a3b8' : '#3b82f6'
+          name: 'Not started',
+          color: '#94a3b8'
         }]
+      } : propertyType === 'select' || propertyType === 'multi-select' ? {
+        options: []
       } : {}),
       ...(propertyType === 'multi-select' ? {
         selectedValues: []
@@ -477,7 +481,7 @@ export default function DatabaseBox({
             )}
           </div>
           <button
-            onClick={onDelete}
+            onClick={() => setShowDeleteConfirm(true)}
             className="p-1.5 hover:bg-gray-100 rounded transition-colors text-gray-500 hover:text-red-600"
             title="Delete Database"
           >
@@ -601,6 +605,21 @@ export default function DatabaseBox({
           }}
         />
       </div>
+      
+      {/* 削除確認ダイアログ */}
+      <ConfirmDialog
+        isOpen={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        onConfirm={() => {
+          onDelete();
+          setShowDeleteConfirm(false);
+        }}
+        title="データベースを削除"
+        message={`「${database.name}」データベースを削除しますか？この操作は取り消せません。`}
+        confirmText="削除"
+        cancelText="キャンセル"
+        type="danger"
+      />
     </div>
   );
 }

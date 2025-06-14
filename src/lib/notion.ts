@@ -64,7 +64,12 @@ const propertyTypeMapping: Record<PropertyType, string> = {
 export function convertToNotionSchema(database: Database) {
   console.log(`\n🔄 Converting schema for database: ${database.name}`);
   console.log(`📋 Database ID: ${database.id}`);
-  console.log(`📝 Input properties:`, database.properties.map(p => ({ name: p.name, type: p.type, order: p.order })));
+  console.log(`📝 Input properties:`, database.properties.map(p => ({ 
+    name: p.name, 
+    type: p.type, 
+    order: p.order,
+    options: p.options // オプションも含める
+  })));
   
   const properties: Record<string, any> = {};
   const statusProperties: Property[] = []; // ステータスプロパティを追跡
@@ -182,6 +187,7 @@ export function convertToNotionSchema(database: Database) {
           }
         };
         console.log(`📝 Select property "${prop.name}" with ${prop.options?.length || 0} options`);
+        console.log(`📝 Select options:`, prop.options);
         break;
         
       case 'multi-select':
@@ -195,6 +201,7 @@ export function convertToNotionSchema(database: Database) {
           }
         };
         console.log(`📝 Multi-select property "${prop.name}" with ${prop.options?.length || 0} options`);
+        console.log(`📝 Multi-select options:`, prop.options);
         break;
       
       case 'status':

@@ -142,13 +142,13 @@ export default function PropertyItem({ property, databases, currentDatabaseId, o
     
     if (newType === 'select' || newType === 'multi-select' || newType === 'status') {
       if (!property.options) {
-        updates.options = [
+        updates.options = newType === 'status' ? [
           {
             id: generateId(),
-            name: newType === 'status' ? 'Not started' : 'Option 1',
-            color: newType === 'status' ? '#94a3b8' : '#3b82f6'
+            name: 'Not started',
+            color: '#94a3b8'
           }
-        ];
+        ] : [];
       }
     } else {
       updates.options = undefined;
