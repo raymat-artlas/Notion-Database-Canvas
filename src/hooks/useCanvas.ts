@@ -18,7 +18,8 @@ export const useCanvas = (canvasId?: string) => {
     zoom: 1,
     panX: 0,
     panY: 0,
-    selectedIds: []
+    selectedIds: [],
+    layerOrder: []
   });
   const [isLoading, setIsLoading] = useState(true);
   
@@ -210,6 +211,10 @@ export const useCanvas = (canvasId?: string) => {
 
         if (savedCanvasState) {
           const parsedState = JSON.parse(savedCanvasState);
+          // Ensure layerOrder exists for backward compatibility
+          if (!parsedState.layerOrder) {
+            parsedState.layerOrder = [];
+          }
           setCanvasState(parsedState);
           console.log('Loaded canvas state:', parsedState);
         }
@@ -269,7 +274,12 @@ export const useCanvas = (canvasId?: string) => {
           }
           
           if (canvasData.canvasState) {
-            setCanvasState(canvasData.canvasState);
+            const restoredState = canvasData.canvasState;
+            // Ensure layerOrder exists for backward compatibility
+            if (!restoredState.layerOrder) {
+              restoredState.layerOrder = [];
+            }
+            setCanvasState(restoredState);
             console.log('Restored canvas state from Supabase');
           }
           
@@ -510,6 +520,40 @@ export const useCanvas = (canvasId?: string) => {
     setDatabases(newDatabases);
   }, []);
 
+  // Bring database to front (topmost layer)
+  const bringToFront = useCallback((databaseId: string) => {
+    setCanvasState(prev => {
+      const currentOrder = prev.layerOrder;
+      const newOrder = currentOrder.filter(id => id !== databaseId);
+      newOrder.push(databaseId); // Add to end (topmost)
+      
+      return {
+        ...prev,
+        layerOrder: newOrder
+      };
+    });
+  }, []);
+
+  // Initialize layer order when databases change
+  useEffect(() => {
+    setCanvasState(prev => {
+      const existingIds = new Set(prev.layerOrder);
+      const newIds = databases
+        .map(db => db.id)
+        .filter(id => !existingIds.has(id));
+      
+      // Remove deleted database IDs and add new ones
+      const validIds = prev.layerOrder.filter(id => 
+        databases.some(db => db.id === id)
+      );
+      
+      return {
+        ...prev,
+        layerOrder: [...validIds, ...newIds]
+      };
+    });
+  }, [databases]);
+
   // Auto-generate relations based on relation properties
   useEffect(() => {
     const autoRelations = generateRelationLines(databases);
@@ -604,7 +648,8 @@ export const useCanvas = (canvasId?: string) => {
       zoom: 1,
       panX: 0,
       panY: 0,
-      selectedIds: []
+      selectedIds: [],
+      layerOrder: []
     });
     // LocalStorageもクリア（ユーザー別・キャンバス別）
     localStorage.removeItem(getUserStorageKey('notion-canvas-databases'));
@@ -623,6 +668,7 @@ export const useCanvas = (canvasId?: string) => {
     addRelation,
     deleteRelation,
     reorderDatabases,
+    bringToFront,
     setCanvasState,
     zoomIn,
     zoomOut,

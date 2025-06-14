@@ -15,8 +15,10 @@ interface DatabaseBoxProps {
   onUpdateOtherDatabase: (id: string, updates: Partial<Database>) => void;
   onDelete: () => void;
   onConnect: (fromId: string, toId: string) => void;
+  onBringToFront: () => void;
   snapToGrid?: boolean;
   confirmPropertyDeletion?: boolean;
+  layerOrder: string[];
 }
 
 const colorOptions = [
@@ -39,8 +41,10 @@ export default function DatabaseBox({
   onUpdateOtherDatabase,
   onDelete,
   onConnect,
+  onBringToFront,
   snapToGrid = false,
-  confirmPropertyDeletion = true
+  confirmPropertyDeletion = true,
+  layerOrder
 }: DatabaseBoxProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [isEditingMemo, setIsEditingMemo] = useState(false);
@@ -55,11 +59,28 @@ export default function DatabaseBox({
   const selectorRef = useRef<HTMLDivElement>(null);
   const colorPickerRef = useRef<HTMLDivElement>(null);
 
+  // Calculate z-index based on layer order
+  const calculateZIndex = () => {
+    const baseZIndex = 50; // Base z-index for databases
+    if (!layerOrder || layerOrder.length === 0) {
+      return baseZIndex;
+    }
+    const layerIndex = layerOrder.indexOf(database.id);
+    if (layerIndex === -1) {
+      // If not in layer order, use base z-index
+      return baseZIndex;
+    }
+    return baseZIndex + layerIndex;
+  };
+
   const handleMouseDown = (e: React.MouseEvent) => {
     // ⌘キー（Mac）またはCtrlキー（Windows/Linux）が押されている場合は、Canvas上のパン処理を優先
     if (e.metaKey || e.ctrlKey) {
       return; // 何もせずに、イベントをCanvasに伝播させる
     }
+    
+    // Bring to front on any click (not just drag)
+    onBringToFront();
     
     // Only allow dragging if the target is the drag handle or header area
     const target = e.target as HTMLElement;
@@ -312,11 +333,12 @@ export default function DatabaseBox({
   return (
     <div
       ref={boxRef}
-      className="absolute bg-white dark:bg-gray-800 border-2 rounded-lg shadow-sm min-w-80 max-w-80 transition-shadow hover:shadow-md overflow-visible z-50"
+      className="absolute bg-white dark:bg-gray-800 border-2 rounded-lg shadow-sm min-w-80 max-w-80 transition-all duration-200 hover:shadow-md overflow-visible"
       style={{
         left: database.x,
         top: database.y,
         borderColor: database.color,
+        zIndex: calculateZIndex(),
       }}
       onMouseDown={(e) => {
         // ⌘キー（Mac）またはCtrlキー（Windows/Linux）が押されている場合はイベントを伝播

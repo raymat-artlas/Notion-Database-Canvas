@@ -27,11 +27,17 @@ export default function CanvasPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [isHovering, setIsHovering] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const [editingField, setEditingField] = useState<'name' | 'description' | null>(null);
   const [editingValue, setEditingValue] = useState('');
 
   // Tutorial (disable while loading)
   const tutorial = useTutorial(TUTORIAL_CONFIGS.CANVAS_FIRST_TIME, { disabled: isLoading });
+
+  // クライアントサイドマウントを追跡
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // 認証確認とキャンバス情報の読み込み
   useEffect(() => {
@@ -127,13 +133,14 @@ export default function CanvasPage() {
   };
 
   // 認証チェック中または読み込み中
-  if (authLoading || isLoading) {
+  // SSR時は常にローディング状態を表示してHydration Mismatchを防ぐ
+  if (!isMounted || authLoading || isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-gray-600">
-            {authLoading ? '認証確認中...' : 'キャンバスを読み込み中...'}
+            {!isMounted ? '読み込み中...' : authLoading ? '認証確認中...' : 'キャンバスを読み込み中...'}
           </p>
         </div>
       </div>

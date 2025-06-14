@@ -122,5 +122,6 @@ export interface CanvasState {
   panX: number;
   panY: number;
   selectedIds: string[];
+  layerOrder: string[]; // Database IDs in bottom-to-top order for z-index management
 }
 

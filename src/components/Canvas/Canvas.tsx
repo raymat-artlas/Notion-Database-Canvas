@@ -74,6 +74,7 @@ export default function Canvas({
     addRelation,
     deleteRelation,
     reorderDatabases,
+    bringToFront,
     zoomIn,
     zoomOut,
     zoomAtPoint,
@@ -378,8 +379,10 @@ export default function Canvas({
               onUpdateOtherDatabase={(id, updates) => updateDatabase(id, updates)}
               onDelete={() => deleteDatabase(database.id)}
               onConnect={addRelation}
+              onBringToFront={() => bringToFront(database.id)}
               snapToGrid={settings.snapToGrid}
               confirmPropertyDeletion={settings.confirmPropertyDeletion}
+              layerOrder={canvasState.layerOrder || []}
             />
           ))}
         </div>
