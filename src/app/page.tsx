@@ -581,7 +581,7 @@ export default function Home() {
                 人気
               </div>
               <h3 className="text-2xl font-bold mb-2">プレミアム</h3>
-              <div className="text-4xl font-bold mb-4">¥320<span className="text-lg font-normal text-purple-200">/月</span></div>
+              <div className="text-4xl font-bold mb-4">¥500<span className="text-lg font-normal text-purple-200">/月</span></div>
               <p className="text-purple-100 mb-6">プロフェッショナル向け</p>
               
               <ul className="space-y-3 mb-8">
