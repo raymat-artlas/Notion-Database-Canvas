@@ -20,6 +20,26 @@ interface NotionPage {
   url: string;
 }
 
+// セッションストレージの安全な取得関数
+const safeGetSessionStorage = (key: string): string | null => {
+  if (typeof window === 'undefined') return null;
+  try {
+    return sessionStorage.getItem(key);
+  } catch {
+    return null;
+  }
+};
+
+// セッションストレージの安全な設定関数
+const safeSetSessionStorage = (key: string, value: string): void => {
+  if (typeof window === 'undefined') return;
+  try {
+    sessionStorage.setItem(key, value);
+  } catch {
+    // 失敗しても続行
+  }
+};
+
 export default function NotionExportDialog({ isOpen, onClose, databases, canvasName }: NotionExportDialogProps) {
   const { user, loading } = useAuth();
   // デフォルトプロジェクト名を生成（キャンバス名 + 日時）
@@ -60,7 +80,7 @@ export default function NotionExportDialog({ isOpen, onClose, databases, canvasN
       loading, 
       userId: user?.id,
       authUser: user,
-      sessionUserId: sessionStorage.getItem('currentUserId')
+      sessionUserId: safeGetSessionStorage('currentUserId')
     });
     
     if (isOpen) {
@@ -71,11 +91,11 @@ export default function NotionExportDialog({ isOpen, onClose, databases, canvasN
         console.log('✅ User found, userId from auth:', user.id);
         targetUserId = user.id;
         // Store user ID for future use
-        sessionStorage.setItem('currentUserId', user.id);
+        safeSetSessionStorage('currentUserId', user.id);
       } else {
         console.log('❌ No user found in auth, trying fallbacks...');
         // フォールバック1: sessionStorageから取得を試す
-        const sessionUserId = sessionStorage.getItem('currentUserId');
+        const sessionUserId = safeGetSessionStorage('currentUserId');
         if (sessionUserId) {
           console.log('📦 Fallback 1: userId from session:', sessionUserId);
           targetUserId = sessionUserId;
@@ -133,7 +153,7 @@ export default function NotionExportDialog({ isOpen, onClose, databases, canvasN
   };
 
   const testConnection = async () => {
-    const currentUserId = user?.id || userId || sessionStorage.getItem('currentUserId') || localStorage.getItem('currentUserId');
+    const currentUserId = user?.id || userId || safeGetSessionStorage('currentUserId') || localStorage.getItem('currentUserId');
     if (!currentUserId) {
       setErrorMessage('ユーザー認証が確認できません。ページを再読み込みしてください。');
       return;
@@ -181,7 +201,7 @@ export default function NotionExportDialog({ isOpen, onClose, databases, canvasN
 
   const loadPages = async () => {
     setIsLoadingPages(true);
-    const currentUserId = user?.id || userId || sessionStorage.getItem('currentUserId') || localStorage.getItem('currentUserId');
+    const currentUserId = user?.id || userId || safeGetSessionStorage('currentUserId') || localStorage.getItem('currentUserId');
     if (!currentUserId) {
       setErrorMessage('ユーザー認証が確認できません。ページを再読み込みしてください。');
       setIsLoadingPages(false);
@@ -309,7 +329,7 @@ export default function NotionExportDialog({ isOpen, onClose, databases, canvasN
     }
 
     // プラン制限チェック
-    const currentUserId = user?.id || userId || sessionStorage.getItem('currentUserId') || localStorage.getItem('currentUserId');
+    const currentUserId = user?.id || userId || safeGetSessionStorage('currentUserId') || localStorage.getItem('currentUserId');
     try {
       const userResponse = await fetch(`/api/user?userId=${currentUserId}`);
       if (userResponse.ok) {
@@ -359,7 +379,7 @@ export default function NotionExportDialog({ isOpen, onClose, databases, canvasN
     }, 200);
     
     try {
-      const currentUserId = user?.id || userId || sessionStorage.getItem('currentUserId') || localStorage.getItem('currentUserId');
+      const currentUserId = user?.id || userId || safeGetSessionStorage('currentUserId') || localStorage.getItem('currentUserId');
       if (!currentUserId) {
         setErrorMessage('ユーザー認証が確認できません。ページを再読み込みしてください。');
         setIsExporting(false);
@@ -441,7 +461,7 @@ export default function NotionExportDialog({ isOpen, onClose, databases, canvasN
         
         // エクスポート成功時にカウントを更新
         try {
-          const updateUserId = user?.id || userId || sessionStorage.getItem('currentUserId') || localStorage.getItem('currentUserId');
+          const updateUserId = user?.id || userId || safeGetSessionStorage('currentUserId') || localStorage.getItem('currentUserId');
           const userResponse = await fetch(`/api/user?userId=${updateUserId}`);
           if (userResponse.ok) {
             const { user: userData } = await userResponse.json();
@@ -568,7 +588,7 @@ export default function NotionExportDialog({ isOpen, onClose, databases, canvasN
                     <button
                       onClick={() => {
                         console.log('🔄 Re-checking settings...');
-                        const currentUserId = user?.id || userId || sessionStorage.getItem('currentUserId') || localStorage.getItem('currentUserId');
+                        const currentUserId = user?.id || userId || safeGetSessionStorage('currentUserId') || localStorage.getItem('currentUserId');
                         if (currentUserId) {
                           checkExistingSettings(currentUserId);
                         } else {

@@ -267,18 +267,20 @@ export async function getCurrentUser() {
     }
     
     // APIエンドポイント経由でユーザー情報を取得（RLS回避）
-    // キャッシュから取得を試みる
-    const cachedData = sessionStorage.getItem(`userData_${user.id}`);
-    if (cachedData) {
-      try {
-        const userData = JSON.parse(cachedData);
-        // キャッシュが5分以内なら使用
-        if (userData._cachedAt && Date.now() - userData._cachedAt < 300000) {
-          console.log('✅ getCurrentUser: Using cached user data');
-          return { user, userData };
+    // キャッシュから取得を試みる（クライアントサイドのみ）
+    if (typeof window !== 'undefined') {
+      const cachedData = sessionStorage.getItem(`userData_${user.id}`);
+      if (cachedData) {
+        try {
+          const userData = JSON.parse(cachedData);
+          // キャッシュが5分以内なら使用
+          if (userData._cachedAt && Date.now() - userData._cachedAt < 300000) {
+            console.log('✅ getCurrentUser: Using cached user data');
+            return { user, userData };
+          }
+        } catch (e) {
+          console.log('⚠️ getCurrentUser: Invalid cache, fetching fresh data');
         }
-      } catch (e) {
-        console.log('⚠️ getCurrentUser: Invalid cache, fetching fresh data');
       }
     }
     
@@ -329,11 +331,13 @@ export async function getCurrentUser() {
       
       if (userData) {
         console.log('✅ getCurrentUser: Successfully retrieved user data via API')
-        // キャッシュに保存
-        sessionStorage.setItem(`userData_${user.id}`, JSON.stringify({
-          ...userData,
-          _cachedAt: Date.now()
-        }));
+        // キャッシュに保存（クライアントサイドのみ）
+        if (typeof window !== 'undefined') {
+          sessionStorage.setItem(`userData_${user.id}`, JSON.stringify({
+            ...userData,
+            _cachedAt: Date.now()
+          }));
+        }
         return { user, userData }
       } else {
         console.log('⚠️ getCurrentUser: No user data found via API')

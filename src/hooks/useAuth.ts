@@ -12,8 +12,18 @@ interface AuthState {
 }
 
 export function useAuth() {
-  // 初期状態をキャッシュから復元
+  // 初期状態をキャッシュから復元（クライアントサイドのみ）
   const [authState, setAuthState] = useState<AuthState>(() => {
+    // サーバーサイドでは初期状態のまま
+    if (typeof window === 'undefined') {
+      return {
+        user: null,
+        userData: null,
+        loading: true,
+        error: null
+      };
+    }
+    
     const cachedUserId = sessionStorage.getItem('currentUserId');
     if (cachedUserId) {
       const cachedData = sessionStorage.getItem(`userData_${cachedUserId}`);
@@ -97,8 +107,8 @@ export function useAuth() {
         error: null
       })
       
-      // Store user ID in sessionStorage for fallback usage
-      if (result.user?.id) {
+      // Store user ID in sessionStorage for fallback usage（クライアントサイドのみ）
+      if (result.user?.id && typeof window !== 'undefined') {
         sessionStorage.setItem('currentUserId', result.user.id);
       }
     } catch (error) {
