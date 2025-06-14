@@ -235,7 +235,7 @@ export const useCanvas = (canvasId?: string) => {
         
         // Add timeout to prevent hanging
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
         
         const response = await fetch(`/api/canvas/${canvasId}?userId=${user.id}`, {
           signal: controller.signal
@@ -324,7 +324,7 @@ export const useCanvas = (canvasId?: string) => {
           console.log('Authentication timeout, stopping loading...');
           setIsLoading(false);
         }
-      }, 10000); // 10 second timeout
+      }, 5000); // 5 second timeout
       
       return () => {
         isMounted = false;

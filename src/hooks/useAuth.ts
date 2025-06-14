@@ -12,11 +12,35 @@ interface AuthState {
 }
 
 export function useAuth() {
-  const [authState, setAuthState] = useState<AuthState>({
-    user: null,
-    userData: null,
-    loading: true,
-    error: null
+  // 初期状態をキャッシュから復元
+  const [authState, setAuthState] = useState<AuthState>(() => {
+    const cachedUserId = sessionStorage.getItem('currentUserId');
+    if (cachedUserId) {
+      const cachedData = sessionStorage.getItem(`userData_${cachedUserId}`);
+      if (cachedData) {
+        try {
+          const userData = JSON.parse(cachedData);
+          // キャッシュが5分以内なら使用
+          if (userData._cachedAt && Date.now() - userData._cachedAt < 300000) {
+            return {
+              user: { id: cachedUserId } as SupabaseUser,
+              userData,
+              loading: false,
+              error: null
+            };
+          }
+        } catch (e) {
+          // キャッシュが無効な場合はフォールバック
+        }
+      }
+    }
+    
+    return {
+      user: null,
+      userData: null,
+      loading: true,
+      error: null
+    };
   })
   
   // タブ切り替えによる重複処理を防ぐ
@@ -27,6 +51,11 @@ export function useAuth() {
   const refreshUser = useCallback(async (forceRefresh = false) => {
     // ページが非表示の場合は実行しない（タブ切り替え対策）
     if (!forceRefresh && document.hidden) {
+      return
+    }
+    
+    // キャッシュから復元済みで強制リフレッシュでない場合はスキップ
+    if (!forceRefresh && !authState.loading && authState.user) {
       return
     }
     
@@ -51,9 +80,9 @@ export function useAuth() {
         await supabase.auth.refreshSession()
       }
       
-      // タイムアウト付きでgetCurrentUserを実行
+      // タイムアウト付きでgetCurrentUserを実行（5秒に短縮）
       const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Auth timeout')), 10000)
+        setTimeout(() => reject(new Error('Auth timeout')), 5000)
       )
       
       const result = await Promise.race([
@@ -186,7 +215,7 @@ export function useAuth() {
         loading: false,
         error: prev.user ? null : '認証の確認に時間がかかっています。ページを再読み込みしてください。'
       }))
-    }, 10000) // 10秒に延長
+    }, 5000) // 5秒に短縮
     
     return () => {
       clearTimeout(timeoutId)

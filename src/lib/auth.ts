@@ -267,6 +267,25 @@ export async function getCurrentUser() {
     }
     
     // APIエンドポイント経由でユーザー情報を取得（RLS回避）
+    // キャッシュから取得を試みる
+    const cachedData = sessionStorage.getItem(`userData_${user.id}`);
+    if (cachedData) {
+      try {
+        const userData = JSON.parse(cachedData);
+        // キャッシュが5分以内なら使用
+        if (userData._cachedAt && Date.now() - userData._cachedAt < 300000) {
+          console.log('✅ getCurrentUser: Using cached user data');
+          return { user, userData };
+        }
+      } catch (e) {
+        console.log('⚠️ getCurrentUser: Invalid cache, fetching fresh data');
+      }
+    }
+    
+    // API経由でユーザー詳細情報を取得（タイムアウトを5秒に短縮）
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5秒でタイムアウト
+    
     try {
       console.log('🔍 getCurrentUser: Fetching user data via API for user:', user.id)
       
@@ -279,7 +298,10 @@ export async function getCurrentUser() {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
+        signal: controller.signal
       });
+      
+      clearTimeout(timeoutId);
       
       if (!response.ok) {
         throw new Error(`API request failed: ${response.status}`);
@@ -307,6 +329,11 @@ export async function getCurrentUser() {
       
       if (userData) {
         console.log('✅ getCurrentUser: Successfully retrieved user data via API')
+        // キャッシュに保存
+        sessionStorage.setItem(`userData_${user.id}`, JSON.stringify({
+          ...userData,
+          _cachedAt: Date.now()
+        }));
         return { user, userData }
       } else {
         console.log('⚠️ getCurrentUser: No user data found via API')

@@ -118,10 +118,10 @@ export default function Dashboard() {
 
 
   const loadCanvases = useCallback(async () => {
-    // タイムアウトを設定（30秒）
+    // タイムアウトを設定（5秒に短縮）
     const timeoutId = setTimeout(() => {
       setIsLoadingCanvases(false)
-    }, 30000)
+    }, 5000)
 
     try {
       setIsLoadingCanvases(true)
@@ -137,15 +137,17 @@ export default function Dashboard() {
         );
         setCanvases(sortedData);
         
-        // ローカルのキャンバス数をSupabaseと同期
+        // ローカルのキャンバス数をSupabaseと同期（非同期で実行）
         const userId = user?.id;
-        await fetch('/api/user', {
+        fetch('/api/user', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             userId,
             updates: { canvas_count: sortedData.length }
           })
+        }).catch(error => {
+          console.error('Failed to sync canvas count:', error);
         });
       } else {
         // ローカルに何もない場合はSupabaseからも確認
@@ -161,38 +163,38 @@ export default function Dashboard() {
               setCanvases(supabaseCanvases);
               localStorage.setItem(canvasesKey, JSON.stringify(supabaseCanvases));
               
-              // Supabaseのキャンバス数も更新
-              await fetch('/api/user', {
+              // Supabaseのキャンバス数も更新（非同期）
+              fetch('/api/user', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                   userId,
                   updates: { canvas_count: supabaseCanvases.length }
                 })
-              });
+              }).catch(console.error);
             } else {
               // Supabaseにも何もない場合
               setCanvases([]);
-              await fetch('/api/user', {
+              fetch('/api/user', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                   userId,
                   updates: { canvas_count: 0 }
                 })
-              });
+              }).catch(console.error);
             }
           } else {
             // Supabase読み込みエラーの場合
             setCanvases([]);
-            await fetch('/api/user', {
+            fetch('/api/user', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
                 userId,
                 updates: { canvas_count: 0 }
               })
-            });
+            }).catch(console.error);
           }
         } catch (supabaseError) {
           console.error('Failed to load from Supabase:', supabaseError);
