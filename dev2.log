@@ -8,9 +8,9 @@
    - Environments: .env.local
 
  ✓ Starting...
- ✓ Ready in 1321ms
+ ✓ Ready in 2.6s
  ○ Compiling /dashboard ...
- ✓ Compiled /dashboard in 3.1s (1019 modules)
+ ✓ Compiled /dashboard in 3.4s (1019 modules)
  ✓ Compiled /_not-found in 206ms (991 modules)
  ⨯ [Error: Cannot find module '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/.next/server/middleware-manifest.json'
 Require stack:
@@ -22,14 +22,14 @@ Require stack:
   requireStack: [Array]
 }
  ○ Compiling /_error ...
- ✓ Compiled /_error in 568ms (1325 modules)
- ⨯ [Error: ENOENT: no such file or directory, open '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/.next/server/next-font-manifest.json'] {
+ ✓ Compiled /_error in 584ms (1325 modules)
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/.next/server/pages-manifest.json'] {
   errno: -2,
   code: 'ENOENT',
   syscall: 'open',
-  path: '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/.next/server/next-font-manifest.json'
+  path: '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/.next/server/pages-manifest.json'
 }
- GET /dashboard 500 in 4854ms
+ GET /dashboard 500 in 5467ms
 <w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/.next/cache/webpack/server-development/0.pack.gz_' -> '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/.next/cache/webpack/server-development/0.pack.gz'
 <w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/.next/cache/webpack/client-development/0.pack.gz_' -> '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/.next/cache/webpack/client-development/0.pack.gz'
 <w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/.next/cache/webpack/client-development-fallback/0.pack.gz_' -> '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/.next/cache/webpack/client-development-fallback/0.pack.gz'

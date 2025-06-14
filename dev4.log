@@ -1,0 +1,24 @@
+
+> notion-database-canvas@0.1.0 dev
+> next dev -p 3002
+
+  ▲ Next.js 15.0.0
+  - Local:        http://localhost:3002
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 1129ms
+ ○ Compiling /dashboard ...
+ ⨯ src/app/layout.tsx
+`next/font` error:
+Unknown font `Geist`
+ ⨯ src/app/layout.tsx
+`next/font` error:
+Unknown font `Geist`
+ ⨯ src/app/layout.tsx
+`next/font` error:
+Unknown font `Geist`
+ GET /dashboard 500 in 3127ms
+ ✓ Compiled /_error in 1522ms (1118 modules)
+ ✓ Compiled in 274ms (1100 modules)
+ GET /dashboard 200 in 151ms

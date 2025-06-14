@@ -15,10 +15,10 @@ interface DatabaseBoxProps {
   onUpdateOtherDatabase: (id: string, updates: Partial<Database>) => void;
   onDelete: () => void;
   onConnect: (fromId: string, toId: string) => void;
-  onBringToFront: () => void;
+  onBringToFront?: () => void;
   snapToGrid?: boolean;
   confirmPropertyDeletion?: boolean;
-  layerOrder: string[];
+  layerOrder?: string[];
 }
 
 const colorOptions = [
@@ -44,7 +44,7 @@ export default function DatabaseBox({
   onBringToFront,
   snapToGrid = false,
   confirmPropertyDeletion = true,
-  layerOrder
+  layerOrder = []
 }: DatabaseBoxProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [isEditingMemo, setIsEditingMemo] = useState(false);

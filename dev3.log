@@ -1,0 +1,59 @@
+
+> notion-database-canvas@0.1.0 dev
+> next dev -p 3002
+
+   ▲ Next.js 15.3.3
+   - Local:        http://localhost:3002
+   - Network:      http://172.20.10.2:3002
+   - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 1269ms
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 3s (1019 modules)
+ ⨯ [Error: Cannot find module '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/.next/server/middleware-manifest.json'
+Require stack:
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/next-server.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/dev/next-dev-server.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/next.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/lib/start-server.js] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array]
+}
+ ○ Compiling /_error ...
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/.next/cache/webpack/server-development/0.pack.gz_' -> '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/.next/cache/webpack/server-development/0.pack.gz'
+ ✓ Compiled /_error in 1080ms (1332 modules)
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/.next/server/next-font-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/.next/server/next-font-manifest.json'
+}
+ GET /dashboard 500 in 5169ms
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/.next/cache/webpack/client-development-fallback/0.pack.gz_' -> '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/.next/cache/webpack/client-development-fallback/0.pack.gz'
+ ✓ Compiled /_not-found in 237ms (1322 modules)
+ ⨯ [Error: Cannot find module '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/.next/server/middleware-manifest.json'
+Require stack:
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/next-server.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/dev/next-dev-server.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/next.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/lib/start-server.js] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array]
+}
+ ⨯ [Error: Cannot find module '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/.next/server/pages/_document.js'
+Require stack:
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/require.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/load-components.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/build/utils.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/build/swc/options.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/build/swc/index.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/build/next-config-ts/transpile-config.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/config.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/next.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/lib/start-server.js] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array]
+}
+ GET /dashboard 500 in 300ms
+[?25h
