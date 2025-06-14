@@ -83,12 +83,4 @@ body {
   animation: shake 0.5s ease-in-out;
 }
 
-/* キャンバス関連のz-index管理 */
-.connections-svg {
-  z-index: 1 !important; /* リレーション線は最下層 */
-}
-
-/* データベースボックスは線よりも上に表示 */
-.database-box {
-  z-index: 10; /* データベースのベースz-index */
-}
+/* キャンバス関連のレイヤー管理 - DOMの順序で制御 */

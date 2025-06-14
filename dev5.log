@@ -8,3 +8,116 @@
 
  ✓ Starting...
  ✓ Ready in 1528ms
+ ○ Compiling / ...
+ ✓ Compiled / in 2.8s (759 modules)
+ ✓ Compiled /_not-found in 146ms (744 modules)
+ ⨯ Error: Cannot find module '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/.next/server/middleware-manifest.json'
+Require stack:
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/next-server.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/dev/next-dev-server.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/next.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1225:15)
+    at /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/require-hook.js:55:36
+    at Function._load (node:internal/modules/cjs/loader:1055:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1311:12)
+    at mod.require (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:136:16)
+    at DevServer.getMiddlewareManifest (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/next-server.js:864:26)
+    at DevServer.getEdgeFunctionsPages (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/next-server.js:880:31)
+    at DevServer.renderErrorToResponseImpl (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/next-server.js:839:22)
+    at async DevServer.pipeImpl (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/base-server.js:984:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/next-server.js:228:21)
+    at async DevServer.handleRequestImpl (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/base-server.js:877:17)
+    at async /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/dev/next-dev-server.js:373:20
+    at async Span.traceAsyncFn (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/trace/trace.js:157:20)
+    at async DevServer.handleRequest (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/dev/next-dev-server.js:370:24)
+    at async invokeRender (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/lib/router-server.js:183:21)
+    at async handleRequest (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/lib/router-server.js:360:24)
+    at async requestHandlerImpl (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/lib/router-server.js:384:13)
+    at async Server.requestListener (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/lib/start-server.js:142:13) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/next-server.js',
+    '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/dev/next-dev-server.js',
+    '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/next.js',
+    '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 540ms (965 modules)
+ GET / 500 in 3645ms
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/.next/cache/webpack/client-development/0.pack.gz_' -> '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/.next/cache/webpack/client-development/0.pack.gz'
+ ⨯ Error: Cannot find module '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/.next/server/middleware-manifest.json'
+Require stack:
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/next-server.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/dev/next-dev-server.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/next.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1225:15)
+    at /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/require-hook.js:55:36
+    at Function._load (node:internal/modules/cjs/loader:1055:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1311:12)
+    at mod.require (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:136:16)
+    at DevServer.getMiddlewareManifest (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/next-server.js:864:26)
+    at DevServer.getEdgeFunctionsPages (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/next-server.js:880:31)
+    at DevServer.renderErrorToResponseImpl (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/next-server.js:839:22)
+    at async DevServer.pipeImpl (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/base-server.js:984:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/next-server.js:228:21)
+    at async DevServer.handleRequestImpl (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/base-server.js:877:17)
+    at async /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/dev/next-dev-server.js:373:20
+    at async Span.traceAsyncFn (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/trace/trace.js:157:20)
+    at async DevServer.handleRequest (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/dev/next-dev-server.js:370:24)
+    at async invokeRender (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/lib/router-server.js:183:21)
+    at async handleRequest (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/lib/router-server.js:360:24)
+    at async requestHandlerImpl (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/lib/router-server.js:384:13)
+    at async Server.requestListener (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/lib/start-server.js:142:13) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/next-server.js',
+    '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/dev/next-dev-server.js',
+    '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/next.js',
+    '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ Error: Cannot find module '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/.next/server/middleware-manifest.json'
+Require stack:
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/next-server.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/dev/next-dev-server.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/next.js
+- /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1225:15)
+    at /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/require-hook.js:55:36
+    at Function._load (node:internal/modules/cjs/loader:1055:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1311:12)
+    at mod.require (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:136:16)
+    at DevServer.getMiddlewareManifest (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/next-server.js:864:26)
+    at DevServer.getEdgeFunctionsPages (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/next-server.js:880:31)
+    at DevServer.renderErrorToResponseImpl (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/next-server.js:839:22)
+    at async DevServer.pipeImpl (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/base-server.js:984:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/next-server.js:228:21)
+    at async DevServer.handleRequestImpl (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/base-server.js:877:17)
+    at async /Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/dev/next-dev-server.js:373:20
+    at async Span.traceAsyncFn (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/trace/trace.js:157:20)
+    at async DevServer.handleRequest (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/dev/next-dev-server.js:370:24)
+    at async invokeRender (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/lib/router-server.js:183:21)
+    at async handleRequest (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/lib/router-server.js:360:24)
+    at async requestHandlerImpl (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/lib/router-server.js:384:13)
+    at async Server.requestListener (/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/lib/start-server.js:142:13) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/next-server.js',
+    '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/dev/next-dev-server.js',
+    '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/next.js',
+    '/Users/raymat/Documents/00-artlas/Notionapps/notion-builder/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+[?25h

@@ -364,12 +364,24 @@ export default function Canvas({
         )}
         
         <div 
-          className="absolute inset-0 transition-transform duration-200 ease-out"
+          className="absolute inset-0"
           style={{
             transform: `translate(${canvasState.panX}px, ${canvasState.panY}px) scale(${canvasState.zoom})`,
             transformOrigin: '0 0'
           }}
         >
+          {/* Connection lines SVG - render BEFORE databases so they appear behind */}
+          <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0 }}>
+            <g style={{ pointerEvents: 'auto' }}>
+              {/* Relation connections */}
+              {relationLines.map(line => line.component)}
+              
+              {/* Formula dependency connections (same-database only) */}
+              {formulaLines.map(line => line.component)}
+            </g>
+          </svg>
+
+          {/* Database boxes - render AFTER SVG so they appear on top */}
           {databases.map(database => (
             <DatabaseBox
               key={database.id}
@@ -386,17 +398,6 @@ export default function Canvas({
             />
           ))}
         </div>
-
-        {/* Connection lines SVG - using canvas coordinate system */}
-        <svg className="connections-svg absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 1 }}>
-          <g style={{ pointerEvents: 'auto' }}>
-            {/* Relation connections */}
-            {relationLines.map(line => line.component)}
-            
-            {/* Formula dependency connections (same-database only) */}
-            {formulaLines.map(line => line.component)}
-          </g>
-        </svg>
         
         {databases.length === 0 && (
           <div className="fixed inset-0 flex items-center justify-center pointer-events-none">
