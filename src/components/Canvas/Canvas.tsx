@@ -382,13 +382,13 @@ export default function Canvas({
               onBringToFront={() => bringToFront(database.id)}
               snapToGrid={settings.snapToGrid}
               confirmPropertyDeletion={settings.confirmPropertyDeletion}
-              layerOrder={canvasState.layerOrder || []}
+              layerOrder={canvasState?.layerOrder || []}
             />
           ))}
         </div>
 
         {/* Connection lines SVG - using canvas coordinate system */}
-        <svg className="connections-svg absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0 }}>
+        <svg className="connections-svg absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 1 }}>
           <g style={{ pointerEvents: 'auto' }}>
             {/* Relation connections */}
             {relationLines.map(line => line.component)}

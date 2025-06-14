@@ -61,16 +61,21 @@ export default function DatabaseBox({
 
   // Calculate z-index based on layer order
   const calculateZIndex = () => {
-    const baseZIndex = 50; // Base z-index for databases
-    if (!layerOrder || layerOrder.length === 0) {
+    const baseZIndex = 10; // Base z-index for databases (higher than connection lines)
+    try {
+      if (!layerOrder || !Array.isArray(layerOrder) || layerOrder.length === 0) {
+        return baseZIndex;
+      }
+      const layerIndex = layerOrder.indexOf(database.id);
+      if (layerIndex === -1) {
+        // If not in layer order, use base z-index
+        return baseZIndex;
+      }
+      return baseZIndex + layerIndex;
+    } catch (error) {
+      console.warn('Error calculating z-index:', error);
       return baseZIndex;
     }
-    const layerIndex = layerOrder.indexOf(database.id);
-    if (layerIndex === -1) {
-      // If not in layer order, use base z-index
-      return baseZIndex;
-    }
-    return baseZIndex + layerIndex;
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -80,7 +85,13 @@ export default function DatabaseBox({
     }
     
     // Bring to front on any click (not just drag)
-    onBringToFront();
+    try {
+      if (onBringToFront) {
+        onBringToFront();
+      }
+    } catch (error) {
+      console.warn('Error bringing to front:', error);
+    }
     
     // Only allow dragging if the target is the drag handle or header area
     const target = e.target as HTMLElement;
@@ -333,7 +344,7 @@ export default function DatabaseBox({
   return (
     <div
       ref={boxRef}
-      className="absolute bg-white dark:bg-gray-800 border-2 rounded-lg shadow-sm min-w-80 max-w-80 transition-all duration-200 hover:shadow-md overflow-visible"
+      className="database-box absolute bg-white dark:bg-gray-800 border-2 rounded-lg shadow-sm min-w-80 max-w-80 transition-all duration-200 hover:shadow-md overflow-visible"
       style={{
         left: database.x,
         top: database.y,
