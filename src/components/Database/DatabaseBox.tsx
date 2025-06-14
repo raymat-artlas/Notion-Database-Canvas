@@ -115,11 +115,14 @@ export default function DatabaseBox({
 
   const handleMouseMove = (e: MouseEvent) => {
     if (isDragging) {
-      const newX = e.clientX - dragStart.x;
-      const newY = e.clientY - dragStart.y;
-      onUpdate({
-        x: snapToGrid ? snapToGridPoint(newX) : newX,
-        y: snapToGrid ? snapToGridPoint(newY) : newY
+      // Use requestAnimationFrame for smoother updates
+      requestAnimationFrame(() => {
+        const newX = e.clientX - dragStart.x;
+        const newY = e.clientY - dragStart.y;
+        onUpdate({
+          x: snapToGridPoint(newX),
+          y: snapToGridPoint(newY)
+        });
       });
     }
   };
@@ -341,9 +344,7 @@ export default function DatabaseBox({
   return (
     <div
       ref={boxRef}
-      className={`absolute bg-white dark:bg-gray-800 border-2 rounded-lg shadow-sm min-w-80 max-w-80 overflow-visible ${
-        isDragging ? 'cursor-grabbing shadow-lg' : 'transition-all duration-200 hover:shadow-md'
-      }`}
+      className="database-box absolute bg-white dark:bg-gray-800 border-2 rounded-lg shadow-sm min-w-80 max-w-80 transition-all duration-200 hover:shadow-md overflow-visible"
       style={{
         left: database.x,
         top: database.y,
