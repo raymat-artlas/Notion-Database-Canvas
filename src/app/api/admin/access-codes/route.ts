@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { withAdminAuth } from '@/lib/adminAuth';
 
-export async function GET() {
+export const GET = withAdminAuth(async () => {
   try {
     const { data: accessCodes, error } = await supabaseAdmin
       .from('access_codes')
@@ -18,9 +19,9 @@ export async function GET() {
     console.error('Access codes API error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
-}
+});
 
-export async function POST(request: NextRequest) {
+export const POST = withAdminAuth(async (request: NextRequest) => {
   try {
     console.log('POST /api/admin/access-codes - Starting');
     
@@ -91,9 +92,9 @@ export async function POST(request: NextRequest) {
       details: error instanceof Error ? error.message : 'Unknown error' 
     }, { status: 500 });
   }
-}
+});
 
-export async function DELETE(request: NextRequest) {
+export const DELETE = withAdminAuth(async (request: NextRequest) => {
   try {
     const url = new URL(request.url);
     const id = url.searchParams.get('id');
@@ -117,4 +118,4 @@ export async function DELETE(request: NextRequest) {
     console.error('Delete access code API error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
-}
+});

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { withAdminAuth } from '@/lib/adminAuth';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -12,7 +13,7 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey, {
 });
 
 // GET: プロモーションコード一覧取得
-export async function GET() {
+export const GET = withAdminAuth(async () => {
   try {
     const { data: promoCodes, error } = await supabase
       .from('promo_codes')
@@ -29,10 +30,10 @@ export async function GET() {
     console.error('Error fetching promo codes:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
-}
+});
 
 // POST: プロモーションコード作成
-export async function POST(request: NextRequest) {
+export const POST = withAdminAuth(async (request: NextRequest) => {
   try {
     const body = await request.json();
     const {
@@ -88,10 +89,10 @@ export async function POST(request: NextRequest) {
     console.error('Error creating promo code:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
-}
+});
 
 // PUT: プロモーションコード更新
-export async function PUT(request: NextRequest) {
+export const PUT = withAdminAuth(async (request: NextRequest) => {
   try {
     const body = await request.json();
     const {
@@ -145,10 +146,10 @@ export async function PUT(request: NextRequest) {
     console.error('Error updating promo code:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
-}
+});
 
 // DELETE: プロモーションコード削除
-export async function DELETE(request: NextRequest) {
+export const DELETE = withAdminAuth(async (request: NextRequest) => {
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
@@ -172,4 +173,4 @@ export async function DELETE(request: NextRequest) {
     console.error('Error deleting promo code:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
-}
+});

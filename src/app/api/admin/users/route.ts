@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { withAdminAuth } from '@/lib/adminAuth';
 
 // GET: 全ユーザー一覧取得（auth.usersとusersテーブルを統合）
-export async function GET(request: NextRequest) {
+export const GET = withAdminAuth(async (request: NextRequest) => {
   try {
     // 1. auth.usersから全ユーザーを取得
     const { data: { users: authUsers }, error: authError } = await supabaseAdmin.auth.admin.listUsers();
@@ -49,15 +50,15 @@ export async function GET(request: NextRequest) {
       { status: 500 }
     );
   }
-}
+});
 
 // PUT: プラン管理は今後profiles等で拡張予定
-export async function PUT(request: NextRequest) {
+export const PUT = withAdminAuth(async (request: NextRequest) => {
   return NextResponse.json({ error: 'Not implemented. プラン管理はprofiles等で拡張してください。' }, { status: 501 });
-}
+});
 
 // DELETE: ユーザー削除（auth.users基準）
-export async function DELETE(request: NextRequest) {
+export const DELETE = withAdminAuth(async (request: NextRequest) => {
   try {
     const url = new URL(request.url);
     const userId = url.searchParams.get('userId');
@@ -84,4 +85,4 @@ export async function DELETE(request: NextRequest) {
       { status: 500 }
     );
   }
-}
+});
